@@ -47,6 +47,8 @@ abstract class Command extends ConsoleKit\Command
         // Add runtime options.
         $options = array_replace($config, $this->options);
 
+        $this->createFiles($options);
+
         return $options;
     }
 
@@ -80,14 +82,37 @@ abstract class Command extends ConsoleKit\Command
         return $this->getParameters($option);
     }
 
-    public function getPath($name)
-    {
-        return str_replace("'", '', $this->getOption($name));
-    }
-
     public function getDefaults()
     {
         return array();
+    }
+
+    public function getPath($name)
+    {
+        preg_match('@\'(.*?)\'@i', $this->getOption($name), $matches);
+
+        if (isset($matches[1])) {
+            return $matches[1];
+        }
+    }
+
+    protected function createFiles($options)
+    {
+        foreach (array('tmp', 'data', 'logs') as $dir) {
+            if (!file_exists('.clamp/' . $dir)) {
+                mkdir('.clamp/' . $dir, 0755, true);
+            }
+        }
+
+        foreach ($options as $name => $option) {
+            if (is_string($option) && preg_match('@\'(.*?)\'@i', $option, $matches)) {
+                $file = $matches[1];
+                if (strstr($file, '.log')) {
+                    if (!file_exists(dirname($file))) mkdir(dirname($file), 0755, true);
+                    if (!file_exists($file)) file_put_contents($file, '');
+                }
+            }
+        }
     }
 
     protected function waitFor($file)

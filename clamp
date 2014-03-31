@@ -1,10 +1,10 @@
 #!/bin/bash
 
 SOURCE="${BASH_SOURCE[0]}"
-while [ -h "$SOURCE" ]; do # resolve $SOURCE until the file is no longer a symlink
+while [ -h "$SOURCE" ]; do
   DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
   SOURCE="$(readlink "$SOURCE")"
-  [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE" # if $SOURCE was a relative symlink, we need to resolve it relative to the path where the symlink file was located
+  [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE"
 done
 DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
 
@@ -13,11 +13,9 @@ start() {
 }
  
 stop() {
-    echo -en "\n"
-
+    echo "\n"
     php $DIR/clamp.php controller stop
-
-   exit $?
+    exit $?
 }
 
 if `$1`; then
@@ -26,5 +24,5 @@ if `$1`; then
 
     while true; do read x; done
 else
-    php $DIR/clamp.php "$@"
+    php $PWD/clamp.php "$@"
 fi
