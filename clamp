@@ -13,7 +13,7 @@ start() {
 }
  
 stop() {
-    echo "\n"
+    echo -en "\n"
     php $DIR/clamp.php controller stop
     exit $?
 }
@@ -25,5 +25,4 @@ if [ "$#" == "0" ]; then
     while true; do read x; done
 else
     php $DIR/clamp.php "$@"
-
 fi
