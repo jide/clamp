@@ -13,13 +13,6 @@ spl_autoload_register(function($className) {
     }
 });
 
-
-
-//Clamp\Command::loadConfig(getcwd() . '/clamp.json');
-//Clamp\ApacheCommand::$binPath = dirname(shell_exec('which httpd')) . '/';
-//Clamp\MysqlCommand::$binPath = '$(brew --prefix mariadb)/bin/';
-
-
 //which php 2>/dev/null
 
 $console = new Clamp\Console();
