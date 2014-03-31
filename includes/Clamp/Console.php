@@ -6,6 +6,8 @@ use ConsoleKit;
 
 class Console extends ConsoleKit\Console
 {
+    protected $helpCommandClass = 'ConsoleKit\HelpCommand';
+    
     protected $configFile;
 
     protected $config;

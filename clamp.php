@@ -16,6 +16,7 @@ spl_autoload_register(function($className) {
 //which php 2>/dev/null
 
 $console = new Clamp\Console();
+$console->addCommand('Clamp\HelpCommand');
 $console->addCommand('Clamp\ApacheCommand');
 $console->addCommand('Clamp\MysqlCommand');
 $console->addCommand('Clamp\HostCommand');
