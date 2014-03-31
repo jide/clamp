@@ -12,9 +12,9 @@ abstract class Command extends ConsoleKit\Command
 
     public function execute(array $args, array $options = array())
     {
-        $this->options = $options;
-
         exec('sudo -v');
+        
+        $this->options = $options;
 
         parent::execute($args, $this->options);
     }

@@ -11,7 +11,6 @@ class ApacheCommand extends \Clamp\Command
     public function executeStart(array $args = array(), array $options = array())
     {
         if (!file_exists($this->getPath('pidfile'))) {
-            //var_dump($this->getParameters());
             exec('sudo ' . $this->getBinPath() . 'httpd -d . -f /dev/null ' . $this->getParameters() . ' > /dev/null &');
             $this->waitFor($this->getPath('pidfile'));
             $this->writeln('Apache server started', ConsoleKit\Colors::GREEN);
