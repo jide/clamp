@@ -1,0 +1,3 @@
+[submodule "includes/ConsoleKit"]
+	path = includes/ConsoleKit
+	url = https://github.com/maximebf/ConsoleKit.git
