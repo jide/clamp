@@ -8,15 +8,15 @@ class ControllerCommand extends \Clamp\Command
 {
     public function executeStart(array $args = array(), array $options = array())
     {
-        $this->getConsole()->run(array('apache', 'start'));
-        $this->getConsole()->run(array('host', 'start'));
-        $this->getConsole()->run(array('mysql', 'start'));
+        $this->getConsole()->execute('apache', array('start'), $this->getConfig('$.apache.options'));
+        $this->getConsole()->execute('host', array('start'), $this->getConfig('$.host.options'));
+        $this->getConsole()->execute('mysql', array('start'), $this->getConfig('$.mysql.options'));
     }
 
     public function executeStop(array $args = array(), array $options = array())
     {
-        $this->getConsole()->run(array('apache', 'stop'));
-        $this->getConsole()->run(array('host', 'stop'));
-        $this->getConsole()->run(array('mysql', 'stop'));
+        $this->getConsole()->execute('apache', array('stop'), $this->getConfig('$.apache.options'));
+        $this->getConsole()->execute('host', array('stop'), $this->getConfig('$.host.options'));
+        $this->getConsole()->execute('mysql', array('stop'), $this->getConfig('$.mysql.options'));
     }
 }
