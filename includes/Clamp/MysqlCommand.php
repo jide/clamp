@@ -6,39 +6,51 @@ use ConsoleKit;
 
 class MysqlCommand extends \Clamp\Command
 {
-    protected static $binPath = '$(brew --prefix mariadb)/bin/';
-
-    protected static $baseDir = '$(brew --prefix mariadb)/';
+    protected $parameter = '--%1$s=%2$s';
 
     public function executeStart(array $args = array(), array $options = array())
     {
-        if (!file_exists($this->getPath('socket'))) {
-            exec($this->getBinPath() . 'mysqld_safe --defaults-file=/dev/null ' . $this->getParameters() . ' > /dev/null &');
-            $this->waitFor($this->getPath('socket'));
-            $this->writeln('MySQL server started', ConsoleKit\Colors::GREEN);
-        }
-        else {
-            $this->writeln('MySQL server is already running', ConsoleKit\Colors::YELLOW);
-        }
+        $this->getConsole()->run(array('mysql', 'install'));
+        $this->getConsole()->run(array('mysql', 'create-db'));
+        $this->getConsole()->run(array('mysql', 'daemon', 'start'));
     }
 
     public function executeStop(array $args = array(), array $options = array())
     {
-        if (file_exists($this->getPath('socket'))) {
-            exec($this->getBinPath() . 'mysqladmin -u root ' . $this->getParameter('socket') . ' shutdown');
-            $this->waitForNoMore($this->getPath('socket'));
-            $this->writeln('MySQL server stopped', ConsoleKit\Colors::RED);
+        $this->getConsole()->run(array('mysql', 'daemon', 'stop'));
+    }
+
+    public function executeDaemon(array $args = array(), array $options = array())
+    {
+        if (empty($args) || $args[0] == 'start') {
+            if (!$this->isRunning($this->getPath($options['pid-file']))) {
+                $this->preparePaths($options);
+                exec($this->getConfig('$.mysql.command.mysqld') . ' --no-defaults ' . $this->buildParameters($options) . ' > /dev/null &');
+                $this->waitFor($this->getPath($options['socket']));
+                $this->writeln('MySQL server started', ConsoleKit\Colors::GREEN);
+            }
+            else {
+                $this->writeln('MySQL server is already running', ConsoleKit\Colors::YELLOW);
+            }
         }
-        else {
-            $this->writeln('MySQL server is not running', ConsoleKit\Colors::YELLOW);
+        else if (!empty($args) && $args[0] == 'stop') {
+            if ($this->isRunning($this->getPath($options['pid-file']))) {
+                exec($this->getConfig('$.mysql.command.mysqladmin') . ' --user=root ' . $this->buildParameters($options, 'socket') . ' shutdown');
+                $this->waitForNoMore($this->getPath($options['socket']));
+                $this->writeln('MySQL server stopped', ConsoleKit\Colors::RED);
+            }
+            else {
+                $this->writeln('MySQL server is not running', ConsoleKit\Colors::YELLOW);
+            }
         }
     }
 
     public function executeInstall(array $args = array(), array $options = array())
     {
-        if (!file_exists($this->getPath('datadir') . '/mysql')) {
-            exec($this->getBinPath() . 'mysql_install_db --user=`whoami` ' . $this->getParameters('basedir', 'datadir'));
-            $this->waitFor($this->getPath('datadir') . '/mysql');
+        if (!file_exists($this->getPath($options['datadir']) . '/mysql')) {
+            $this->preparePaths($options);
+            exec($this->getConfig('$.mysql.command.mysql_install_db') . ' --user=`whoami` ' . $this->buildParameters($options, 'basedir', 'datadir'));
+            $this->waitFor($this->getPath($options['datadir']) . '/mysql');
             $this->writeln('Initialized MySQL data directory', ConsoleKit\Colors::CYAN);
         }
         else {
@@ -48,62 +60,121 @@ class MysqlCommand extends \Clamp\Command
 
     public function executeCreateDb(array $args = array(), array $options = array())
     {
-        if ($this->getOption('db')) {
-            if (!file_exists($this->getPath('datadir') . '/' . $this->getOption('db'))) {
-                exec($this->getBinPath() . 'mysql -u `whoami` ' . $this->getParameter('socket') . ' -e "CREATE DATABASE IF NOT EXISTS ' . $this->getOption('db') . '"');
-                $this->waitFor($this->getPath('datadir') . '/' . $this->getOption('db'));
-                $this->writeln('Created database ' . $this->getOption('db'), ConsoleKit\Colors::CYAN);
+        list($db, ) = $this->getDb($args);
+
+        if ($db) {
+            if (!file_exists($this->getPath($options['datadir']) . '/' . $db)) {
+                exec($this->getConfig('$.mysql.command.mysql') . ' --user=`whoami` ' . $this->buildParameters($options, 'socket') . ' -e "CREATE DATABASE IF NOT EXISTS ' . $db . '"');
+                $this->waitFor($this->getPath($options['datadir']) . '/' . $db);
+                $this->writeln('Created database ' . $db, ConsoleKit\Colors::CYAN);
             }
             else {
-                $this->writeln('Database ' . $this->getOption('db') . ' already exists', ConsoleKit\Colors::YELLOW);
+                $this->writeln('Database ' . $db . ' already exists', ConsoleKit\Colors::YELLOW);
             }
         }
         else {
-            $this->writeln('No database to create', ConsoleKit\Colors::YELLOW);
+            $this->writeln('No database name set', ConsoleKit\Colors::YELLOW);
         }
     }
 
     public function executeExport(array $args = array(), array $options = array())
     {
-        if (file_exists($this->getPath('socket'))) {
-            exec($this->getBinPath() . 'mysqldump -u `whoami` ' . $this->getParameter('socket') . ' ' . $this->getOption('db') . ' > ' . $this->getOption('db') . '.sql');
-            $this->waitFor($this->getOption('db') . '.sql');
-            $this->writeln('Database ' . $this->getOption('db') . ' exported to ' . $this->getOption('db') . '.sql', ConsoleKit\Colors::CYAN);
+        list($db, $file) = $this->getDb($args);
+
+        if (empty($db)) {
+            $db = '--all-databases';
         }
-        else {
-            $this->writeln('MySQL server is not running', ConsoleKit\Colors::YELLOW);
+
+        $confirm = true;
+
+        if (file_exists($file) && !strstr($file, '.backup')) {
+            $confirm = false;
+            $dialog = new ConsoleKit\Widgets\Dialog($this->getConsole());
+
+            if ($dialog->confirm('File ' . $file . ' exists. Overwrite ?')) {
+                $confirm = true;
+            }
+        }
+
+        if ($confirm) {
+            // Start server if needed.
+            if (!$running = $this->isRunning($this->getPath($options['pid-file']))) {
+                $this->getConsole()->run(array('mysql', 'start'));
+            }
+
+            exec($this->getConfig('$.mysql.command.mysqldump') . ' --user=root ' . $this->buildParameters($options, 'socket') . ' ' . $db . ' > ' . $file);
+            $this->waitFor($file);
+            $this->writeln('Database ' . $db . ' exported to ' . $file, ConsoleKit\Colors::GREEN);
+
+            if (!$running) {
+                $this->getConsole()->run(array('mysql', 'stop'));
+            }
         }
     }
 
     public function executeImport(array $args = array(), array $options = array())
     {
-        if (file_exists($this->getPath('socket'))) {
-            exec($this->getBinPath() . 'mysql -u `whoami` ' . $this->getParameter('socket') . ' ' . $this->getOption('db') . ' < ' . $this->getOption('db') . '.sql');
-            $this->writeln('File ' . $this->getOption('db') . '.sql imported to ' . $this->getOption('db'), ConsoleKit\Colors::CYAN);
+        $args = array_reverse($args);
+        if (count($args) == 1) {
+            $args = array(null, $args[0]);
+        }
+        list($db, $file) = $this->getDb($args);
+
+        if (!file_exists($file)) {
+            $this->writeln('File ' . $file . ' does not exist', ConsoleKit\Colors::YELLOW);
+        }
+        else if (empty($db)) {
+            $this->writeln('No database set', ConsoleKit\Colors::YELLOW);
         }
         else {
-            $this->writeln('MySQL server is not running', ConsoleKit\Colors::YELLOW);
+            $dialog = new ConsoleKit\Widgets\Dialog($this->getConsole());
+
+            if ($dialog->confirm('All data in ' . $db . ' will be replaced with ' . $file . '. Import ?')) {
+                // Start server if needed.
+                if (!$running = $this->isRunning($this->getPath($options['pid-file']))) {
+                    $this->getConsole()->run(array('mysql', 'start'));
+                }
+
+                // Backup if needed.
+                if ($this->getConfig('$.mysql.backup-on-import')) {
+                    $this->getConsole()->run(array('mysql', 'export', $db, $file . '.backup'));
+                }
+
+                exec($this->getConfig('$.mysql.command.mysql') . ' --user=root ' . $this->buildParameters($options, 'socket') . ' ' . $db . ' < ' . $file);
+                $this->writeln('File ' . $file . ' imported to ' . $db, ConsoleKit\Colors::GREEN);
+
+                if (!$running) {
+                    $this->getConsole()->run(array('mysql', 'stop'));
+                }
+            }
         }
     }
 
-    public function getDefaults()
+    protected function getDb($args = array())
     {
-        $path = getcwd();
+        if (!empty($args[0])) {
+            $db = $args[0];
+        }
+        else {
+            $db = $this->getConfig('$.mysql.db');
+        }
 
-        return array(
-            "bind-address" => "127.0.0.1",
-            "port" => "3306",
-            "basedir" => self::$baseDir,
-            "datadir" => "'$path/.clamp/data'",
-            "socket" => "'$path/.clamp/tmp/mysql.sock'",
-            "pid-file" => "'$path/.clamp/tmp/mysql.pid'",
-            "log_error" => "'$path/.clamp/logs/mysql.error.log'",
-            "max_binlog_size" => "10M"
-        );
-    }
+        if (!empty($args[1])) {
+            $file = $args[1];
+        }
+        else {
+            $file = $this->getConfig('$.mysql.dump');
+        }
 
-    protected function getParametrised($name, $option)
-    {
-        return "--$name=$option";
+        if (empty($file)) {
+            if (!empty($db)) {
+                $file = $db . '.sql';
+            }
+            else {
+                $file = 'dump.sql';
+            }
+        }
+
+        return array($db, $file);
     }
 }

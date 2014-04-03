@@ -16,7 +16,6 @@ class HelpCommand extends ConsoleKit\Command
                     $this->writeln($formater->format($name));
                 }
             }
-            $scriptName = basename($_SERVER['SCRIPT_FILENAME']);
             $this->writeln("Use 'clamp help command' for more info");
         } else {
             $commandFQDN = $this->console->getCommand($args[0]);

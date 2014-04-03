@@ -13,12 +13,15 @@ spl_autoload_register(function($className) {
     }
 });
 
-//which php 2>/dev/null
+require_once 'JsonPath/JsonPath.php';
 
-$console = new Clamp\Console();
-$console->addCommand('Clamp\HelpCommand');
-$console->addCommand('Clamp\ApacheCommand');
-$console->addCommand('Clamp\MysqlCommand');
-$console->addCommand('Clamp\HostCommand');
-$console->addCommand('Clamp\ControllerCommand');
+$commands = array(
+	'Clamp\HelpCommand',
+	'Clamp\ApacheCommand',
+	'Clamp\HostCommand',
+	'Clamp\MysqlCommand',
+	'Clamp\ControllerCommand'
+);
+
+$console = new ConsoleKit\Console($commands, new Clamp\ConfigOptionsParser());
 $console->run();

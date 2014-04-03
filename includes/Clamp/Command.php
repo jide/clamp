@@ -6,113 +6,107 @@ use ConsoleKit;
 
 abstract class Command extends ConsoleKit\Command
 {
-    protected static $binPath = '';
+    protected $separator = ' ';
 
-    protected $options = array();
+    protected $parameter = '%1$s=%2$s';
 
-    public function execute(array $args, array $options = array())
+    public function getConfig($expr = null)
     {
-        exec('sudo -v');
-        
-        $this->options = $options;
-
-        parent::execute($args, $this->options);
+        return $this->getConsole()->getOptionsParser()->getConfig($expr);
     }
 
-    public function getBinPath()
+    protected function buildParameters($options = array())
     {
-        return self::$binPath;
-    }
-
-    public function setOptions($options)
-    {
-        $this->options = $options;
-
-        return $this;
-    }
-
-    public function getOptions()
-    {
-        // Merge defaults and config.
-        $type = strtolower(substr(get_class($this), 6, -7));
-        $config = array_replace($this->getDefaults(), $this->getConsole()->getConfig($type));
+        $parameters = array();
+        $options = $this->flatten($options);
 
         // Filter if needed.
         $subset = func_get_args();
+        array_shift($subset);
 
         if (!empty($subset)) {
-            $config = array_intersect_key($config, array_flip($subset));
+            $options = array_intersect_key($options, array_flip($subset));
         }
 
-        // Add runtime options.
-        $options = array_replace($config, $this->options);
-
-        $this->createFiles($options);
-
-        return $options;
-    }
-
-    public function getOption($option)
-    {
-        $options = $this->getOptions($option);
-
-        if (!empty($options)) {
-            return reset($this->getOptions($option));
-        }
-        else {
-            return null;
-        }
-    }
-
-    public function getParameters()
-    {
-        $parameters = array();
-
-        $options = $this->flatten(call_user_func_array(array($this, 'getOptions'), func_get_args()));
-
-        foreach ($options as $name => $option) {
-            $parameters[$name] = $this->getParametrised($name, $option);
+        foreach ($options as $key => $value) {
+            $parameters[$key] = sprintf($this->parameter, $key, $value);
         }
 
-        return implode($this->getSeparator(), $parameters);
+        return implode($this->separator, $parameters);
     }
 
-    public function getParameter($option)
+    public function getPath($option)
     {
-        return $this->getParameters($option);
-    }
-
-    public function getDefaults()
-    {
-        return array();
-    }
-
-    public function getPath($name)
-    {
-        preg_match('@\'(.*?)\'@i', $this->getOption($name), $matches);
+        preg_match('@\'(.*?)\'@i', $option, $matches);
 
         if (isset($matches[1])) {
             return $matches[1];
         }
     }
 
-    protected function createFiles($options)
+    public function getPaths($options)
     {
-        foreach (array('tmp', 'data', 'logs') as $dir) {
-            if (!file_exists('.clamp/' . $dir)) {
-                mkdir('.clamp/' . $dir, 0755, true);
+        $paths = array();
+
+        foreach ($options as $key => $value) {
+            if (is_string($value) && $path = $this->getPath($value)) {
+                $paths[$key] = $path;
             }
         }
 
-        foreach ($options as $name => $option) {
-            if (is_string($option) && preg_match('@\'(.*?)\'@i', $option, $matches)) {
-                $file = $matches[1];
-                if (strstr($file, '.log')) {
-                    if (!file_exists(dirname($file))) mkdir(dirname($file), 0755, true);
-                    if (!file_exists($file)) file_put_contents($file, '');
+        return $paths;
+    }
+
+    public function preparePaths($options)
+    {
+        $paths = $this->getPaths($options);
+
+        foreach ($paths as $path) {
+            if ($extension = pathinfo($path, PATHINFO_EXTENSION)) {
+                if (!file_exists(dirname($path))) {
+                    mkdir(dirname($path), 0755, true);
+                }
+                if ($extension == 'log' && !file_exists($path)) {
+                    file_put_contents($path, '');
                 }
             }
+            else if (!file_exists($path)) {
+                mkdir($path, 0755, true);
+            }
         }
+
+        return $paths;
+    }
+
+    protected function flatten($options, $parent = null)
+    {
+        $flatened = array();
+
+        foreach ($options as $key => $value) {
+            if (is_array($value)) {
+                $flatened = array_replace($flatened, $this->flatten($value, $key));
+            }
+            else {
+                $key = $parent ? $parent . ' ' . $key : $key;
+                $flatened[$key] = $value;
+            }
+        }
+
+        return $flatened;
+    }
+
+    protected function isRunning($pidFile)
+    {
+        if (file_exists($pidFile) && $pid = file_get_contents($pidFile)) {
+            $pid = preg_replace('~[.[:cntrl:][:space:]]~', '', $pid);
+            $count = preg_replace('~[.[:cntrl:][:space:]]~', '', shell_exec('ps aux | grep ' . $pid . ' | wc -l'));
+
+            if ($count > 0) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     protected function waitFor($file)
@@ -127,32 +121,5 @@ abstract class Command extends ConsoleKit\Command
         while (file_exists($file)) {
             sleep(1);
         }
-    }
-
-    protected function flatten($options, $parent = null)
-    {
-        $flat = array();
-
-        foreach ($options as $key => $value) {
-            if (is_array($value)) {
-                $flat = array_replace($flat, $this->flatten($value, $key));
-            }
-            else {
-                $key = $parent ? $parent . ' ' . $key : $key;
-                $flat[$key] = $value;
-            }
-        }
-
-        return $flat;
-    }
-
-    protected function getParametrised($name, $option)
-    {
-        return  "$name=$option";
-    }
-
-    protected function getSeparator()
-    {
-        return  " ";
     }
 }
