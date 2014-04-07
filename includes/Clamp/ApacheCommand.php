@@ -12,7 +12,7 @@ class ApacheCommand extends \Clamp\Command
     {
         if (!$this->isRunning($this->getPath($options['pidfile']))) {
             $this->preparePaths($options);
-            exec($this->getConfig('$.apache.command.httpd') . ' -f /dev/null ' . $this->buildParameters($options) . ' > /dev/null &');
+            exec($this->getConfig('$.apache.commands.httpd') . ' -f /dev/null ' . $this->buildParameters($options) . ' > /dev/null &');
             $this->waitFor($this->getPath($options['pidfile']));
             $this->writeln('Apache server started', ConsoleKit\Colors::GREEN);
         }

@@ -18,11 +18,11 @@ stop() {
     exit $?
 }
 
-if [ "$#" == "0" ]; then
-    trap stop SIGINT
-    start
+#if [ "$#" == "0" ]; then
+#    trap stop SIGINT
+#    start
 
-    while true; do read x; done
-else
+#    while true; do read x; done
+#else
     php $DIR/clamp.php "$@"
-fi
+#fi

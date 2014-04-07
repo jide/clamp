@@ -1,9 +1,8 @@
 {
-    "address": "drupal.local",
-    "memory": "512M",
-    "db": "drupal",
+    "address": "localhost",
+    "memory": "256M",
     "apache": {
-        "command": {
+        "commands": {
             "httpd": "sudo httpd"
         },
         "options": {
@@ -35,34 +34,44 @@
     },
     "host": {
         "options": {
-            "127.0.0.1": "drupal.local"
+            "127.0.0.1": "{{$.address}}"
         }
     },
     "mysql": {
-        "command": {
+        "commands": {
             "mysql": "$(brew --prefix mariadb)/bin/mysql",
             "mysqld": "$(brew --prefix mariadb)/bin/mysqld",
             "mysqladmin": "$(brew --prefix mariadb)/bin/mysqladmin",
             "mysqldump": "$(brew --prefix mariadb)/bin/mysqldump",
             "mysql_install_db": "$(brew --prefix mariadb)/bin/mysql_install_db"
         },
-        "db": "{{$.db}}",
-        "dump": "{{$.mysql.db}}.sql",
+        "databases": [
+            "{{$.database}}"
+        ],
+        "users": {
+            "root": {
+                "password": ""
+            }
+        },
         "backup-on-import": true,
         "options": {
-            "bind-address":  "127.0.0.1",
             "port":  "3306",
+            "lower_case_table_names": 2,
             "basedir":  "$(brew --prefix mariadb)",
             "datadir":  "'{{$cwd}}/.clamp/data'",
             "socket":  "'{{$cwd}}/.clamp/tmp/mysql.sock'",
             "pid-file":  "'{{$cwd}}/.clamp/tmp/mysql.pid'",
             "log_error":  "'{{$cwd}}/.clamp/logs/mysql.error.log'",
-            "max_binlog_size":  "10M"
+            "max_binlog_size":  "10M",
+            "max_allowed_packet": "32M"
         }
     },
     "php": {
         "options": {
-            "memory_limit": "{{$.memory}}"
+            "memory_limit": "{{$.memory}}",
+            "pdo_mysql.default_socket": "{{$.mysql.options.socket}}",
+            "mysql.default_socket": "{{$.mysql.options.socket}}",
+            "mysqli.default_socket": "{{$.mysql.options.socket}}"
         }
     }
 }
