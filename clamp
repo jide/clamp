@@ -26,3 +26,18 @@ stop() {
 #else
     php $DIR/clamp.php "$@"
 #fi
+
+#exec 3< <(cat <<OPTS
+#memory_limit = 128M
+#max_execution_time=300
+#max_input_time=-1
+#upload_max_filesize=25M
+#post_max_size=20M
+#max_input_vars=10000
+#pdo_mysql.default_socket=/Users/jide/Projects/Wordpress/.clamp/tmp/mysql.sock
+#mysql.default_socket=/Users/jide/Projects/Wordpress/.clamp/tmp/mysql.sock
+#mysqli.default_socket=/Users/jide/Projects/Wordpress/.clamp/tmp/mysql.sock
+#OPTS
+#)
+
+#sudo httpd -d . -DFOREGROUND -f /dev/fd/3

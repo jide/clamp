@@ -10,6 +10,17 @@ abstract class Command extends ConsoleKit\Command
 
     protected $parameter = '%1$s=%2$s';
 
+    protected $verbose = false;
+
+    public function execute(array $args, array $options = array())
+    {
+        if (isset($options['verbose'])) {
+            $this->verbose = isset($options['verbose']);
+        }
+
+        return parent::execute($args, $options);
+    }
+
     public function getConfig($expr = null)
     {
         return $this->getConsole()->getOptionsParser()->getConfig($expr);
@@ -17,6 +28,10 @@ abstract class Command extends ConsoleKit\Command
 
     protected function buildParameters($options = array())
     {
+        if (isset($options['verbose'])) {
+            unset($options['verbose']);
+        }
+
         $parameters = array();
         $options = $this->flatten($options);
 
