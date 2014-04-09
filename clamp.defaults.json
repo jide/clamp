@@ -7,7 +7,7 @@
             "httpd": "sudo httpd"
         },
         "options": {
-            "servername": "{{$.address}}}",
+            "servername": "{{$.address}}",
             "listen": "80",
             "documentroot": "'{{$cwd}}'",
             "serverroot": "'{{$cwd}}'",

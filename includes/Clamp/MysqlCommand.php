@@ -28,6 +28,7 @@ class MysqlCommand extends \Clamp\Command
                 $this->preparePaths($options);
                 exec($this->getConfig('$.mysql.commands.mysqld') . ' --defaults-file=/dev/null ' . $this->buildParameters($options) . ' &');
                 $this->waitFor($this->getPath($options['pid-file']));
+                $this->waitFor($this->getPath($options['socket']));
                 $this->writeln('MySQL server started', ConsoleKit\Colors::GREEN);
             }
             else {
@@ -65,7 +66,7 @@ class MysqlCommand extends \Clamp\Command
 
         // Set root password.
         if ($password) {
-            exec($this->getConfig('$.mysql.commands.mysql') . ' --user=root --execute="SET PASSWORD FOR \'root\'@\'localhost\' = PASSWORD(\'' . $password . '\')" 2>&1');
+            exec($this->getConfig('$.mysql.commands.mysql') . ' --user=root ' . $this->buildParameters($options, 'socket') . ' --execute="SET PASSWORD FOR \'root\'@\'localhost\' = PASSWORD(\'' . $password . '\')" 2>&1');
         }
     }
 
@@ -76,7 +77,7 @@ class MysqlCommand extends \Clamp\Command
         if (!empty($databases[0])) {
             foreach ($databases as $key => $database) {
                 if (!file_exists($this->getPath($options['datadir']) . '/' . $database)) {
-                    exec($this->getConfig('$.mysql.commands.mysql') . ' --user=root --password="' . $this->getConfig('$.mysql.users.root.password') . '" --execute="CREATE DATABASE IF NOT EXISTS ' . $database . '"');
+                    exec($this->getConfig('$.mysql.commands.mysql') . ' --user=root --password="' . $this->getConfig('$.mysql.users.root.password') . '" ' . $this->buildParameters($options, 'socket') . ' --execute="CREATE DATABASE IF NOT EXISTS ' . $database . '"');
                     $this->waitFor($this->getPath($options['datadir']) . '/' . $database);
                     $this->writeln('Created database ' . $database, ConsoleKit\Colors::CYAN);
                 }
@@ -121,7 +122,7 @@ class MysqlCommand extends \Clamp\Command
             }
 
             if ($confirm) {
-                exec($this->getConfig('$.mysql.commands.mysqldump') . ' --user=root --password="' . $this->getConfig('$.mysql.users.root.password') . '" ' . $database . ' > ' . $file);
+                exec($this->getConfig('$.mysql.commands.mysqldump') . ' --user=root --password="' . $this->getConfig('$.mysql.users.root.password') . '" ' . $this->buildParameters($options, 'socket') . ' ' . $database . ' > ' . $file);
                 $this->waitFor($file);
                 $this->writeln('Database ' . $database . ' exported to ' . $file, ConsoleKit\Colors::GREEN);
             }
@@ -166,7 +167,7 @@ class MysqlCommand extends \Clamp\Command
                             $this->getConsole()->execute('mysql', array('export', $database, $file . '.backup'), $options);
                         }
 
-                        exec($this->getConfig('$.mysql.commands.mysql') . ' --user=root --password="' . $this->getConfig('$.mysql.users.root.password') . '" ' . $database . ' < ' . $file);
+                        exec($this->getConfig('$.mysql.commands.mysql') . ' --user=root --password="' . $this->getConfig('$.mysql.users.root.password') . '" ' . $this->buildParameters($options, 'socket') . ' ' . $database . ' < ' . $file);
                         $this->writeln('File ' . $file . ' imported to ' . $database, ConsoleKit\Colors::GREEN);
                     }
                 }
@@ -179,7 +180,7 @@ class MysqlCommand extends \Clamp\Command
 
     public function executeUser(array $args = array(), array $options = array())
     {
-        exec($this->getConfig('$.mysql.commands.mysql') . ' --user=root --password="' . $this->getConfig('$.mysql.users.root.password') . '" --execute="DELETE FROM mysql.user WHERE User!=\'\' AND User!=\'root\';"');
+        exec($this->getConfig('$.mysql.commands.mysql') . ' --user=root --password="' . $this->getConfig('$.mysql.users.root.password') . '" ' . $this->buildParameters($options, 'socket') . ' --execute="DELETE FROM mysql.user WHERE User!=\'\' AND User!=\'root\';"');
 
         $users = $this->getConfig('$.mysql.users');
 
@@ -193,7 +194,7 @@ class MysqlCommand extends \Clamp\Command
             }
 
             foreach ($privileges as $on => $permissions) {
-                exec($this->getConfig('$.mysql.commands.mysql') . ' --user=root --password="' . $this->getConfig('$.mysql.users.root.password') . '" --execute="GRANT ' . strtoupper(implode(', ', $permissions)) . ' ON ' . $on . ' TO \'' . $name . '\'@\'localhost\' IDENTIFIED BY \'' . $user['password'] . '\'"');
+                exec($this->getConfig('$.mysql.commands.mysql') . ' --user=root --password="' . $this->getConfig('$.mysql.users.root.password') . '" ' . $this->buildParameters($options, 'socket') . ' --execute="GRANT ' . strtoupper(implode(', ', $permissions)) . ' ON ' . $on . ' TO \'' . $name . '\'@\'localhost\' IDENTIFIED BY \'' . $user['password'] . '\'"');
             }
         }
     }
