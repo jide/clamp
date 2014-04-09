@@ -1,7 +1,7 @@
 {
     "address": "localhost",
     "memory": "256M",
-    "databse": "db",
+    "database": "db",
     "apache": {
         "commands": {
             "httpd": "sudo httpd"
@@ -21,7 +21,6 @@
             "setenv": "LOCAL_SERVER true",
             "user": "`whoami`",
             "group": "staff",
-            "PHPIniDir": "/Users/jide",
             "loadmodule": {
                 "authz_host_module": "/usr/libexec/apache2/mod_authz_host.so",
                 "dir_module": "/usr/libexec/apache2/mod_dir.so",
@@ -50,11 +49,6 @@
         "databases": [
             "{{$.database}}"
         ],
-        "users": {
-            "root": {
-                "password": ""
-            }
-        },
         "backup-on-import": true,
         "options": {
             "bind-address": "127.0.0.1",
