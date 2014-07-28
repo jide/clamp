@@ -3,12 +3,16 @@
 body {
   padding:50px;
   font:14px/1.5 Lato, "Helvetica Neue", Helvetica, Arial, sans-serif;
-  color:#777;
+  color:#e0fff6;
   font-weight:300;
+  background: #4ed0aa;
+}
+
+.octicon {
+  color:#e0fff6;
 }
 
 h1, h2, h3, h4, h5, h6 {
-  color:#222;
   margin:0 0 20px;
 }
 
@@ -24,16 +28,12 @@ h1 {
   font-size:28px;
 }
 
-h2 {
-  color:#393939;
-}
-
-h3, h4, h5, h6 {
-  color:#494949;
+h2, h3, h4, h5, h6 {
+  color:#fff;
 }
 
 a {
-  color:#39c;
+  color:#006245;
   font-weight:400;
   text-decoration:none;
 }
@@ -59,15 +59,13 @@ blockquote {
 
 code, pre {
   font-family:Monaco, Bitstream Vera Sans Mono, Lucida Console, Terminal;
-  color:#333;
   font-size:12px;
 }
 
 pre {
   padding:8px 15px;
-  background: #f8f8f8;  
+  background: #006245;  
   border-radius:5px;
-  border:1px solid #e5e5e5;
   overflow-x: auto;
 }
 
@@ -99,6 +97,7 @@ header {
   width:270px;
   float:left;
   position:fixed;
+  text-align: center;
 }
 
 header ul {
@@ -107,31 +106,33 @@ header ul {
   
   padding:0;
   
-  background: #eee;
+  background: #006245;
+  /*
   background: -moz-linear-gradient(top, #f8f8f8 0%, #dddddd 100%);
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f8f8f8), color-stop(100%,#dddddd));
   background: -webkit-linear-gradient(top, #f8f8f8 0%,#dddddd 100%);
   background: -o-linear-gradient(top, #f8f8f8 0%,#dddddd 100%);
   background: -ms-linear-gradient(top, #f8f8f8 0%,#dddddd 100%);
   background: linear-gradient(top, #f8f8f8 0%,#dddddd 100%);
+  */
   
   border-radius:5px;
-  border:1px solid #d2d2d2;
-  box-shadow:inset #fff 0 1px 0, inset rgba(0,0,0,0.03) 0 -1px 0;
+  /*border:1px solid #d2d2d2;
+  box-shadow:inset #fff 0 1px 0, inset rgba(0,0,0,0.03) 0 -1px 0;*/
   width:270px;
 }
 
 header li {
   width:89px;
   float:left;
-  border-right:1px solid #d2d2d2;
+  /*border-right:1px solid #d2d2d2;*/
   height:40px;
 }
 
 header ul a {
   line-height:1;
   font-size:11px;
-  color:#999;
+  color:#e0fff6;
   display:block;
   text-align:center;
   padding-top:6px;
@@ -139,13 +140,12 @@ header ul a {
 }
 
 strong {
-  color:#222;
   font-weight:700;
 }
 
 header ul li + li {
   width:88px;
-  border-left:1px solid #fff;
+  border-left:1px solid #4ed0aa;
 }
 
 header ul li + li + li {
@@ -154,9 +154,10 @@ header ul li + li + li {
 }
 
 header ul a strong {
-  font-size:14px;
+  font-size:13px;
+  margin-top: 3px;
   display:block;
-  color:#222;
+  color:#fff;
 }
 
 section {
@@ -181,6 +182,7 @@ footer {
   float:left;
   position:fixed;
   bottom:50px;
+  text-align: center;
 }
 
 @media print, screen and (max-width: 960px) {
@@ -197,7 +199,7 @@ footer {
   }
   
   header {
-    padding-right:320px;
+    /*padding-right:320px;*/
   }
   
   section {

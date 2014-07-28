@@ -1,0 +1,6 @@
+{
+  "name": "clamp",
+  "dependencies": {
+    "octicons": "*"
+  }
+}

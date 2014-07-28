@@ -7,6 +7,7 @@
 
     <link rel="stylesheet" href="stylesheets/styles.css">
     <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <link rel="stylesheet" href="bower_components/octicons/octicons/octicons.css">
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
     <!--[if lt IE 9]>
     <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -15,23 +16,30 @@
   <body>
     <div class="wrapper">
       <header>
-        <h1>Clamp</h1>
-        <p>Command Line Apache MySQL PHP</p>
+        <h1><img alt="Clamp" src="images/logo.png"/></h1>
+        <p><strong>Command Line Apache MySQL PHP</strong></p>
 
-        <p class="view"><a href="https://github.com/jide/clamp">View the Project on GitHub <small>jide/clamp</small></a></p>
+        <p class="view"><a href="https://github.com/jide/clamp">View the Project on GitHub</a></p>
 
-
+        <!--
         <ul>
           <li><a href="https://github.com/jide/clamp/zipball/master">Download <strong>ZIP File</strong></a></li>
           <li><a href="https://github.com/jide/clamp/tarball/master">Download <strong>TAR Ball</strong></a></li>
           <li><a href="https://github.com/jide/clamp">View On <strong>GitHub</strong></a></li>
         </ul>
+        -->
       </header>
       <section>
-        <h3>
-<a name="welcome-to-github-pages" class="anchor" href="#welcome-to-github-pages"><span class="octicon octicon-link"></span></a>Welcome to GitHub Pages.</h3>
+<h3><a name="welcome-to-clamp" class="anchor" href="#welcome-to-clamp"><span class="octicon octicon-link"></span></a> Welcome to Clamp</h3>
 
-<p>This automatic page generator is the easiest way to create beautiful pages for all of your projects. Author your page content here using GitHub Flavored Markdown, select a template crafted by a designer, and publish. After your page is generated, you can check out the new branch:</p>
+<p>Clamp is a Command Line Apache MySQL PHP. It aims at being ultra simple to use and easy to configure.</p>
+
+<h3><a name="installation" class="anchor" href="#installation"><span class="octicon octicon-link"></span></a> Installation</h3>
+
+<pre><code>$ curl http://jide.github.io/clamp/install.sh | sh
+</code></pre>
+
+<p>Everything is self-contained in a <code>.clamp</code> folder inside your project: The database files, the logs and the socket and PID files.</p>
 
 <pre><code>$ cd your_repo_root/repo_name
 $ git fetch origin
@@ -62,7 +70,6 @@ $ git checkout gh-pages
       </section>
       <footer>
         <p>This project is maintained by <a href="https://github.com/jide">jide</a></p>
-        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
       </footer>
     </div>
     <script src="javascripts/scale.fix.js"></script>
