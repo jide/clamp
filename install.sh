@@ -46,8 +46,6 @@ url="https://github.com/jide/clamp/tarball/master"
 
 echo "fetching: $url" >&2
 
-echo "$TMP"
-
 cd "$TMP" \
   && curl -SsL "$url" \
      | $tar -xzf - \
