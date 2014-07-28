@@ -32,12 +32,25 @@
       <section>
 <h3><a name="welcome-to-clamp" class="anchor" href="#welcome-to-clamp"><span class="octicon octicon-link"></span></a> Welcome to Clamp</h3>
 
-<p>Clamp is a Command Line Apache MySQL PHP for Mac OS X. It aims at being ultra simple to use and configure.</p>
+<p>Clamp is a Command Line Apache MySQL PHP for Mac OS X. It aims at being ultra simple to use and configure. It uses system's apache and php.</p>
+
+<ul>
+  <li>Uses internal Apache.</li>
+  <li>All data are self contained.</li>
+  <li>Configuration using a JSON file.</li>
+</ul>
 
 <h3><a name="installation" class="anchor" href="#installation"><span class="octicon octicon-link"></span></a> Installation</h3>
 
-<pre><code>$ curl http://jide.github.io/clamp/install.sh | sh
-</code></pre>
+<pre><code>$ curl http://jide.github.io/clamp/install.sh | sh</code></pre>
+
+<h3><a name="quickstart" class="anchor" href="#quickstart"><span class="octicon octicon-link"></span></a> Quickstart</h3>
+
+<p>To quickly get your servers running, just type :
+
+<pre><code>$ clamp</code></pre>
+
+<p>Use <kb>Ctrl</kb> + <kb>C</kb> to exit.</p>
 
 <p>Everything is self-contained in a <code>.clamp</code> folder inside your project: The database files, the logs and the socket and PID files.</p>
 
