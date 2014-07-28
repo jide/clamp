@@ -1,3 +1,5 @@
+#!/bin/sh
+
 # set the temp dir
 TMP="${TMPDIR}"
 if [ "x$TMP" = "x" ]; then
@@ -28,23 +30,37 @@ if [ -z "$tar" ]; then
   ret=$?
 fi
 
-if [ $ret -eq 0 ] && [ -x "$tar" ]; then
-  echo "tar=$tar"
-  echo "version:"
-  $tar --version
-  ret=$?
-fi
-
 if [ $ret -eq 0 ]; then
   (exit 0)
 else
-  echo "No suitable tar program found."
+  echo "No suitable tar program found." >&2
   exit 1
+fi
+
+mysql=`which mysql 2>&1`
+ret=$?
+
+if [ $ret -eq 1 ]; then
+  brew=`which brew 2>&1`
+  ret=$?
+
+  if [ $ret -eq 0 ]; then
+    echo "Installing MariaDB" >&2
+    brew install mariadb
+  else
+    echo "Please install homebrew before installing clamp. Visit http://brew.sh for more information." >&2
+    exit 1
+  fi
 fi
 
 url="https://github.com/jide/clamp/tarball/master"
 
-echo "fetching: $url" >&2
+echo "Fetching: $url" >&2
+
+if [ -d "/usr/local/clamp" ]; then
+  rm -rf /usr/local/bin/clamp
+  rm -rf /usr/local/clamp
+fi
 
 cd "$TMP" \
   && curl -SsL "$url" \
@@ -53,3 +69,7 @@ cd "$TMP" \
   && mv "$TMP"/clamp /usr/local \
   && ln -s /usr/local/clamp/clamp /usr/local/bin/clamp \
   && cd "$BACK" \
+
+echo "Clamp is installed !" >&2
+
+exit
