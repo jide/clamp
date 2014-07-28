@@ -1,20 +1,12 @@
 #!/bin/bash
 
-SOURCE="${BASH_SOURCE[0]}"
-while [ -h "$SOURCE" ]; do
-  DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
-  SOURCE="$(readlink "$SOURCE")"
-  [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE"
-done
-DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
-
 start() {
-    php $DIR/../clamp/clamp.php start
+    php /usr/local/clamp/clamp.php start
 }
  
 stop() {
     echo -en "\n"
-    php $DIR/../clamp/clamp.php stop
+    php /usr/local/clamp/clamp.php stop
     exit $?
 }
 
@@ -24,5 +16,5 @@ if [ "$#" == "0" ]; then
 
     while true; do read x; done
 else
-    php $DIR/../clamp/clamp.php "$@"
+    php /usr/local/clamp/clamp.php "$@"
 fi
