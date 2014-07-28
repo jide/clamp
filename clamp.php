@@ -19,8 +19,7 @@ $commands = array(
 	'Clamp\HostCommand',
 	'Clamp\MysqlCommand',
 	'Clamp\StartCommand',
-	'Clamp\StopCommand'
-	//'Clamp\ControllerCommand'
+	'Clamp\StopCommand',
 );
 
 $console = new ConsoleKit\Console($commands, new Clamp\ConfigOptionsParser());
