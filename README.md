@@ -45,8 +45,8 @@ $ clamp mysql daemon start // Start mysql daemon.
 $ clamp mysql daemon stop // Stop mysql daemon.
 $ clamp mysql install // Install.
 $ clamp mysql create-db [database] // Create a database.
-$ clamp mysql export [database] [file] // Export databases.
-$ clamp mysql import [file] [database] // Import SQL file.
+$ clamp mysql export [database?] [file?] // Export databases.
+$ clamp mysql import [file?] [database?] // Import SQL file.
 
 $ clamp host set [host] // Add a host.
 $ clamp host unset [host] // Remove a host.
@@ -66,7 +66,7 @@ A simple configuration :
 }
 ```
 
-You can also configure each executable and their options :
+You can also configure each command and their options :
 
 ```json
 {
@@ -113,7 +113,7 @@ You can even use a path to another option :
 
 ### [<span class="octicon octicon-link"></span>](#file-structure) File structure
 
-Everything is self-contained in a `.clamp` folder inside your project: The database files, the logs and the socket and PID files.
+Everything is self-contained in a `.clamp` folder inside your project: The database files, the logs and the socket / PID files.
 
 ```
 .clamp
