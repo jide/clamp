@@ -15,14 +15,13 @@ Clamp is a Command Line Apache MySQL PHP for Mac OS X made for local development
 
 ```
 $ curl http://jide.github.io/clamp/install.sh | sh
-
 ```
 
-    You must have [homebrew](http://brew.sh) installed.
+You must have [homebrew](http://brew.sh) installed.
 
-    ### [<span class="octicon octicon-link"></span>](#quickstart) Usage
+### [<span class="octicon octicon-link"></span>](#quickstart) Usage
 
-    To serve the current folder :
+To serve the current folder :
 
 ```
 $ clamp
