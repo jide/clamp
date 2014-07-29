@@ -13,7 +13,7 @@ Clamp is a Command Line Apache MySQL PHP for Mac OS X made for local development
 
 ### [<span class="octicon octicon-link"></span>](#installation) Installation
 
-```bash
+```sh
 curl http://jide.github.io/clamp/install.sh | sh
 ```
 
@@ -23,7 +23,7 @@ You must have [homebrew](http://brew.sh) installed.
 
 To serve the current folder :
 
-```bash
+```sh
 clamp
 ```
 
@@ -33,7 +33,7 @@ By default, this will start apache, create a database named "db", start mysql da
 
 ### [<span class="octicon octicon-link"></span>](#all-commands) All commands
 
-```
+```sh
 $ clamp apache start // Start apache.
 $ clamp apache stop // Stop apache.
 
@@ -66,7 +66,7 @@ A simple configuration :
 
 You can also configure each executable and their options :
 
-```
+```json
 {
     "apache": {
         "commands": {},
@@ -88,13 +88,13 @@ You can also configure each executable and their options :
 
 You can insert the current working direcory :
 
-```
+```json
 "errorlog": "'{{$cwd}}/.clamp/logs/apache.error.log'"
 ```
 
 You can even use a path to another option :
 
-```
+```json
 "php": {
     "options": {
         "memory_limit": "{{$.memory}}",
