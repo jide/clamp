@@ -86,6 +86,8 @@ You can also configure each executable and their options :
 }
 ```
 
+See the [default configuration file](https://github.com/jide/clamp/blob/master/clamp.defaults.json) for a detailed view of the options.
+
 You can insert the current working direcory :
 
 ```json
@@ -104,8 +106,6 @@ You can even use a path to another option :
     }
 }
 ```
-
-See the [default configuration file](https://github.com/jide/clamp/blob/master/clamp.defaults.json) for a detailed view of the options.
 
 ### [<span class="octicon octicon-link"></span>](#file-structure) File structure
 
