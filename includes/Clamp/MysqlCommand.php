@@ -66,7 +66,14 @@ class MysqlCommand extends \Clamp\Command
         if (!empty($databases[0])) {
             foreach ($databases as $key => $database) {
                 if (!file_exists($this->getPath($options['datadir']) . '/' . $database)) {
+                    $running = true;
+                    if (!$running = $this->isRunning($this->getPath($options['pid-file']))) {
+                        $this->getConsole()->execute('mysql', array('daemon', 'start'), $options);
+                    }
                     exec($this->getConfig('$.mysql.commands.mysql') . ' --user=root --password="' . $this->getConfig('$.mysql.users.root.password') . '" ' . $this->buildParameters($options, 'socket') . ' --execute="CREATE DATABASE IF NOT EXISTS ' . $database . '"');
+                    if (!$running) {
+                        $this->getConsole()->execute('mysql', array('daemon', 'stop'), $options);
+                    }
                     $this->waitFor($this->getPath($options['datadir']) . '/' . $database);
                     $this->writeln('Created database ' . $database, ConsoleKit\Colors::CYAN);
                 }
@@ -79,4 +86,122 @@ class MysqlCommand extends \Clamp\Command
             if ($this->verbose) $this->writeln('No database name set', ConsoleKit\Colors::YELLOW);
         }
     }
+
+    public function executeExport(array $args = array(), array $options = array())
+    {       
+        if (isset($args[0]) && !isset($args[1])) {
+            $databases = array($args[0] => $args[0] . '.sql');
+        }
+        else if (isset($args[0]) && isset($args[1])) {
+            $databases = array($args[0] => $args[1]);
+        }
+        else {
+            $databases = $this->getConfig('$.mysql.databases');
+
+            foreach ($databases as $key => $database) {
+                $databases[$database] = $database . '.sql';
+                unset($databases[$key]);
+            }
+        }
+
+        if (empty($databases)) {
+            $databases = array('--all-databases' => 'dump.sql');
+        }
+
+        foreach ($databases as $database => $file) {
+            $confirm = true;
+
+            if (file_exists($file)) {
+                $confirm = false;
+                $dialog = new ConsoleKit\Widgets\Dialog($this->getConsole());
+                $confirm = $dialog->confirm('File ' . $file . ' exists. Overwrite ?');
+            }
+
+            if ($confirm) {
+                $running = true;
+                if (!$running = $this->isRunning($this->getPath($options['pid-file']))) {
+                    $this->getConsole()->execute('mysql', array('daemon', 'start'), $options);
+                }
+                exec($this->getConfig('$.mysql.commands.mysqldump') . ' --user=root --password="' . $this->getConfig('$.mysql.users.root.password') . '" ' . $this->buildParameters($options, 'socket') . ' ' . $database . ' > ' . $file);
+                if (!$running) {
+                    $this->getConsole()->execute('mysql', array('daemon', 'stop'), $options);
+                }
+                $this->waitFor($file);
+                $this->writeln('Database ' . $database . ' exported to ' . $file, ConsoleKit\Colors::GREEN);
+            }
+        }
+    }
+
+    public function executeImport(array $args = array(), array $options = array())
+    {
+        $databases = $this->getConfig('$.mysql.databases');
+
+        if (isset($args[0]) && !isset($args[1]) && !empty($databases)) {
+            if (count($databases) == 1) {
+                $databases = array($databases[0] => $args[0]);
+            }
+            else {
+                $dialog = new ConsoleKit\Widgets\Dialog($this->getConsole());
+                $choice = $dialog->ask("Choose a database :\n- " . implode("\n- ", $databases) . "\nEnter a database name:", $databases[0]);
+                $databases = array($choice => $args[0]);
+            }
+        }
+        else if (isset($args[0]) && isset($args[1])) {
+            $databases = array($args[1] => $args[0]);
+        }
+        else {
+            $databases = array();
+        }
+
+        if (!empty($databases)) {
+            foreach ($databases as $database => $file) {
+                if (!file_exists($file)) {
+                    $this->writeln('File ' . $file . ' does not exist', ConsoleKit\Colors::YELLOW);
+                }
+                else if (empty($database)) {
+                    $this->writeln('No database set', ConsoleKit\Colors::YELLOW);
+                }
+                else {
+                    $dialog = new ConsoleKit\Widgets\Dialog($this->getConsole());
+
+                    if ($dialog->confirm('Are you sure you want to import ' . $file . ' into ' . $database . ' ?')) {
+                        $running = true;
+                        if (!$running = $this->isRunning($this->getPath($options['pid-file']))) {
+                            $this->getConsole()->execute('mysql', array('daemon', 'start'), $options);
+                        }
+                        exec($this->getConfig('$.mysql.commands.mysql') . ' --user=root --password="' . $this->getConfig('$.mysql.users.root.password') . '" ' . $this->buildParameters($options, 'socket') . ' ' . $database . ' < ' . $file);
+                        if (!$running) {
+                            $this->getConsole()->execute('mysql', array('daemon', 'stop'), $options);
+                        }
+                        $this->writeln('File ' . $file . ' imported to ' . $database, ConsoleKit\Colors::GREEN);
+                    }
+                }
+            }
+        }
+        else {
+            $this->writeln('Missing arguments', ConsoleKit\Colors::YELLOW);
+        }
+    }
+    /*
+    public function executeUser(array $args = array(), array $options = array())
+    {
+        exec($this->getConfig('$.mysql.commands.mysql') . ' --user=root --password="' . $this->getConfig('$.mysql.users.root.password') . '" ' . $this->buildParameters($options, 'socket') . ' --execute="DELETE FROM mysql.user WHERE User!=\'\' AND User!=\'root\';"');
+
+        $users = $this->getConfig('$.mysql.users');
+
+        foreach ($users as $name => $user) {
+            if ($name == 'root') {
+                continue;
+            }
+
+            if (!$privileges = $this->getConfig('$.mysql.users.' . $name . '.privileges')) {
+                $privileges = array('*.*' => array('all'));
+            }
+
+            foreach ($privileges as $on => $permissions) {
+                exec($this->getConfig('$.mysql.commands.mysql') . ' --user=root --password="' . $this->getConfig('$.mysql.users.root.password') . '" ' . $this->buildParameters($options, 'socket') . ' --execute="GRANT ' . strtoupper(implode(', ', $permissions)) . ' ON ' . $on . ' TO \'' . $name . '\'@\'localhost\' IDENTIFIED BY \'' . $user['password'] . '\'"');
+            }
+        }
+    }
+    */
 }
