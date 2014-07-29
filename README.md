@@ -99,12 +99,14 @@ You can insert the current working direcory :
 You can even use a path to another option :
 
 ```json
-"php": {
-    "options": {
-        "memory_limit": "{{$.memory}}",
-        "pdo_mysql.default_socket": "{{$.mysql.options.socket}}",
-        "mysql.default_socket": "{{$.mysql.options.socket}}",
-        "mysqli.default_socket": "{{$.mysql.options.socket}}"
+{
+    "php": {
+        "options": {
+            "memory_limit": "{{$.memory}}",
+            "pdo_mysql.default_socket": "{{$.mysql.options.socket}}",
+            "mysql.default_socket": "{{$.mysql.options.socket}}",
+            "mysqli.default_socket": "{{$.mysql.options.socket}}"
+        }
     }
 }
 ```
