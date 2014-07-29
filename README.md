@@ -12,9 +12,11 @@ Clamp is a Command Line Apache MySQL PHP for Mac OS X made for local development
 <span class="octicon octicon-alert"></span> It should **only** be used for local development. It is absolutely not secure for anything else.
 
 ### [<span class="octicon octicon-link"></span>](#installation) Installation
+
 ```
 $ curl http://jide.github.io/clamp/install.sh | sh
 ```
+
     You must have [homebrew](http://brew.sh) installed.
 
     ### [<span class="octicon octicon-link"></span>](#quickstart) Usage
