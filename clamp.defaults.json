@@ -51,14 +51,14 @@
         ],
         "options": {
             "bind-address": "127.0.0.1",
-            "port":  "3306",
+            "port": "3306",
             "lower_case_table_names": 2,
-            "basedir":  "$(brew --prefix mariadb)",
-            "datadir":  "'{{$cwd}}/.clamp/data'",
-            "socket":  "'{{$cwd}}/.clamp/tmp/mysql.sock'",
-            "pid-file":  "'{{$cwd}}/.clamp/tmp/mysql.pid'",
-            "log_error":  "'{{$cwd}}/.clamp/logs/mysql.error.log'",
-            "max_binlog_size":  "10M",
+            "basedir": "$(brew --prefix mariadb)",
+            "datadir": "'{{$cwd}}/.clamp/data'",
+            "socket": "'{{$cwd}}/.clamp/tmp/mysql.sock'",
+            "pid-file": "'{{$cwd}}/.clamp/tmp/mysql.pid'",
+            "log_error": "'{{$cwd}}/.clamp/logs/mysql.error.log'",
+            "max_binlog_size": "10M",
             "max_allowed_packet": "32M"
         }
     },

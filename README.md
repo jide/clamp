@@ -7,13 +7,13 @@ Clamp is a Command Line Apache MySQL PHP for Mac OS X made for local development
 
 *   Uses system's Apache and PHP, and MariaDB using homebrew.
 *   All data are self contained in a `.clamp` folder.
-*   Configuration is done using a JSON file.
+*   Configuration is done using a `clamp.json` JSON file.
 
 <span class="octicon octicon-alert"></span> It should **only** be used for local development. It is absolutely not secure for anything else.
 
 ### [<span class="octicon octicon-link"></span>](#installation) Installation
 
-```sh
+```
 $ curl http://jide.github.io/clamp/install.sh | sh
 ```
 
@@ -23,17 +23,19 @@ You must have [homebrew](http://brew.sh) installed.
 
 To serve the current folder :
 
-```sh
+```
 $ clamp
 ```
 
 Use <kbd>Ctrl</kbd> + <kbd>C</kbd> to exit.
 
-By default, this will start apache, create a database named "db", start mysql daemon and set the host as "localhost". You can customize these settings using the [configuration](#configuration) file.
+By default, this will start apache, create a database named "db", start MySQL daemon and set the host as "localhost". You can customize these settings using the [configuration](#configuration) file.
+
+You can connect to MySQL through localhost:3306 with user "root" and a blank password. [Sequel pro](http://www.sequelpro.com) is a great app for managing your databases.
 
 ### [<span class="octicon octicon-link"></span>](#all-commands) All commands
 
-```sh
+```
 $ clamp apache start // Start apache.
 $ clamp apache stop // Stop apache.
 
