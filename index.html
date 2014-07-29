@@ -73,8 +73,8 @@ $ clamp mysql daemon start // Start mysql daemon.
 $ clamp mysql daemon stop // Stop mysql daemon.
 $ clamp mysql install // Install.
 $ clamp mysql create-db [database] // Create a database.
-$ clamp mysql export [database] [file] // Export databases.
-$ clamp mysql import [file] [database] // Import SQL file.
+$ clamp mysql export [database?] [file?] // Export database.
+$ clamp mysql import [file?] [database?] // Import SQL file.
 
 $ clamp host set [host] // Add a host.
 $ clamp host unset [host] // Remove a host.
@@ -92,7 +92,7 @@ $ clamp host unset [host] // Remove a host.
     "database": "db",
 }</code></pre>
 
-        <p>You can also configure each executable and their options :</p>
+        <p>You can also configure each command and their options :</p>
 
         <pre><code>{
     "apache": {
@@ -133,7 +133,7 @@ $ clamp host unset [host] // Remove a host.
 
         <h3><a name="file-structure" class="anchor" href="#file-structure"><span class="octicon octicon-link"></span></a> File structure</h3>
 
-        <p>Everything is self-contained in a <code>.clamp</code> folder inside your project: The database files, the logs and the socket and PID files.</p>
+        <p>Everything is self-contained in a <code>.clamp</code> folder inside your project: The database files, the logs and the socket / PID files.</p>
 
         <pre><code>.clamp
   - data // The database files
