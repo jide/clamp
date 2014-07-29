@@ -2,14 +2,18 @@
 
 body {
   padding:50px;
-  font:14px/1.5 Lato, "Helvetica Neue", Helvetica, Arial, sans-serif;
-  color:#e0fff6;
+  font:15px/1.5 Lato, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  color:#003b2a;
   font-weight:300;
   background: #4ed0aa;
 }
 
-.octicon {
-  color:#e0fff6;
+h3 .octicon {
+  color:#9df5db;
+}
+
+h3 a {
+  background: none;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -33,9 +37,12 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 a {
-  color:#006245;
-  font-weight:400;
+  color:inherit;
+  border-radius:3px;
+  background: #62e2bd;
+  font-weight:700;
   text-decoration:none;
+  padding:.1em .2em;
 }
 
 a small {
@@ -64,9 +71,10 @@ code, pre {
 
 pre {
   padding:8px 15px;
-  background: #006245;  
+  background: #1f765d;  
   border-radius:5px;
   overflow-x: auto;
+  color: #e0fff6;
 }
 
 table {

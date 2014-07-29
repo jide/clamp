@@ -34,30 +34,115 @@
       <section>
         <h3><a name="welcome-to-clamp" class="anchor" href="#welcome-to-clamp"><span class="octicon octicon-link"></span></a> Welcome to Clamp</h3>
 
-        <p>Clamp is a Command Line Apache MySQL PHP for Mac OS X. It aims at being ultra simple to use and configure.</p>
+        <p>Clamp is a Command Line Apache MySQL PHP for Mac OS X made for local development. It aims at being ultra simple to use and configure.</p>
 
         <ul>
-          <li>Uses system Apache and PHP.</li>
+          <li>Uses system's Apache and PHP, and MariaDB using homebrew.</li>
           <li>All data are self contained in a <code>.clamp</code> folder.</li>
           <li>Configuration is done using a JSON file.</li>
         </ul>
+
+        <p><span class="octicon octicon-alert"></span> It should <strong>only</strong> be used for local development. It is absolutely not secure for anything else.</p>
 
         <h3><a name="installation" class="anchor" href="#installation"><span class="octicon octicon-link"></span></a> Installation</h3>
 
         <pre><code>$ curl http://jide.github.io/clamp/install.sh | sh</code></pre>
 
-        <h3><a name="quickstart" class="anchor" href="#quickstart"><span class="octicon octicon-link"></span></a> Quickstart</h3>
+        <p>You must have <a href="http://brew.sh" target="_blank">homebrew</a> installed.</p>
 
-        <p>To quickly get your servers running, go to your project folder and type :
+        <h3><a name="quickstart" class="anchor" href="#quickstart"><span class="octicon octicon-link"></span></a> Usage</h3>
+
+        <p>To serve the current folder :</p>
 
         <pre><code>$ clamp</code></pre>
 
         <p>Use <kbd>Ctrl</kbd> + <kbd>C</kbd> to exit.</p>
 
+        <p>By default, this will start apache, create a database named "db", start mysql daemon and set the host as "localhost". You can customize these settings using the <a href="#configuration">configuration</a> file.</p>
+
+        <h3><a name="all-commands" class="anchor" href="#all-commands"><span class="octicon octicon-link"></span></a> All commands</h3>
+
+        <pre><code>$ clamp apache start // Start apache.
+$ clamp apache stop // Stop apache.
+
+$ clamp mysql start // Install database, start daemon and create db.
+$ clamp mysql stop // Shortcut for mysql daemon stop.
+$ clamp mysql daemon start // Start mysql daemon.
+$ clamp mysql daemon stop // Stop mysql daemon.
+$ clamp mysql install // Install.
+$ clamp mysql create-db [database] // Create a database.
+$ clamp mysql export [database] [file] // Export databases.
+$ clamp mysql import [file] [database] // Import SQL file.
+
+$ clamp host set [host] // Add a host.
+$ clamp host unset [host] // Remove a host.
+</code></pre>
+
+        <h3><a name="configuration" class="anchor" href="#configuration"><span class="octicon octicon-link"></span></a> Configuration</h3>
+
+        <p>All configuration resides in a clamp.json file. All the parameters are built using this file and then passed to the different commands. It uses a few tricks that make it very flexible. </p>
+
+        <p>A simple configuration :</p>
+
+        <pre><code>{
+    "address": "localhost",
+    "memory": "256M",
+    "database": "db",
+}</code></pre>
+
+        <p>You can also configure each executable and their options :</p>
+
+        <pre><code>{
+    "apache": {
+        "commands": {},
+        "options": {}
+    },
+    "host": {
+        "options": {}
+    },
+    "mysql": {
+        "commands": {},
+        "databases": [],
+        "options": {}
+    },
+    "php": {
+        "options": {}
+    }
+}</code></pre>
+
+        <p>You can insert the current working direcory :</p>
+
+        <pre><code>"errorlog": "'{{$cwd}}/.clamp/logs/apache.error.log'"</code></pre>
+
+        <p>You can even use a path to another option :</p>
+
+    <pre><code>"php": {
+    "options": {
+        "memory_limit": "{{$.memory}}",
+        "pdo_mysql.default_socket": "{{$.mysql.options.socket}}",
+        "mysql.default_socket": "{{$.mysql.options.socket}}",
+        "mysqli.default_socket": "{{$.mysql.options.socket}}"
+    }
+}</code></pre>
+
+        <p>See the <a href="https://github.com/jide/clamp/blob/master/clamp.defaults.json">default configuration file</a> for a detailed view of the options.</p>
+
+        <h3><a name="file-structure" class="anchor" href="#file-structure"><span class="octicon octicon-link"></span></a> File structure</h3>
+
         <p>Everything is self-contained in a <code>.clamp</code> folder inside your project: The database files, the logs and the socket and PID files.</p>
+
+        <pre><code>.clamp
+  - data // The database files
+  - logs // Apache and MySQL logs
+  - tmp // PIDs and sockets</code></pre>
+
+      <p>Note that this is the default configuration. But since you can define these paths in the configuration file, you are free to use a completly different structure.</p>
+
       </section>
       <footer>
-        <p>This project is maintained by <a href="https://github.com/jide">jide</a></p>
+        <p>This project is maintained by <a href="http://jide.fr">jide</a></p>
+        <p><a href="https://github.com/jide"><span class="octicon octicon-mark-github"></span></a>
+        <a href="https://twitter.com/jidefr">@jidefr</a></p>
       </footer>
     </div>
 
