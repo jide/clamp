@@ -115,7 +115,7 @@ Everything is self-contained in a `.clamp` folder inside your project: The datab
 .clamp
   - data // The database files
   - logs // Apache and MySQL logs
-  - tmp // PIDs and sockets
+  - tmp // PID files and sockets
 ```
 
 Note that this is the default configuration. But since you can define these paths in the configuration file, you are free to use a completly different structure.
