@@ -120,12 +120,14 @@ $ clamp host unset [host] // Remove a host.
 
         <p>You can even use a path to another option :</p>
 
-    <pre><code>"php": {
-    "options": {
-        "memory_limit": "{{$.memory}}",
-        "pdo_mysql.default_socket": "{{$.mysql.options.socket}}",
-        "mysql.default_socket": "{{$.mysql.options.socket}}",
-        "mysqli.default_socket": "{{$.mysql.options.socket}}"
+    <pre><code>{
+    "php": {
+        "options": {
+            "memory_limit": "{{$.memory}}",
+            "pdo_mysql.default_socket": "{{$.mysql.options.socket}}",
+            "mysql.default_socket": "{{$.mysql.options.socket}}",
+            "mysqli.default_socket": "{{$.mysql.options.socket}}"
+        }
     }
 }</code></pre>
 
