@@ -5,6 +5,7 @@ Clamp
 
 Clamp is a Command Line Apache MySQL PHP for Mac OS X made for local development. It aims at being ultra simple to use and configure.
 
+*   Automatically creates a host and a database.
 *   Uses system's Apache and PHP, and MariaDB using homebrew.
 *   System-wide configuration remains unchanged.
 *   All data are self contained in a `.clamp` folder.
