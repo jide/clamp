@@ -23,7 +23,13 @@ You must have [homebrew](http://brew.sh) installed.
 
 ### [<span class="octicon octicon-link"></span>](#installation) OS X Yosemite
 
-If you have updated from OS X Mavericks to Yosemite, you may have to reinstall MariaDB :
+Run the install script again to update to latest version. After this, the `clamp update` command will be available and you won't have to call this script directly again :
+
+```
+$ curl http://jide.github.io/clamp/install.sh | sh
+```
+
+If you have trouble running MySQL server, you may have to reinstall MariaDB :
 
 *   Download and install [XCode 6](https://developer.apple.com/downloads/download.action?path=Developer_Tools/xcode_6.1/xcode_6.1.dmg)
 *   Update Hombrew : cd /usr/local && git pull
