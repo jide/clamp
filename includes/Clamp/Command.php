@@ -114,11 +114,9 @@ abstract class Command extends ConsoleKit\Command
     {
         if (file_exists($pidFile) && $pid = file_get_contents($pidFile)) {
             $pid = preg_replace('~[.[:cntrl:][:space:]]~', '', $pid);
-            $count = preg_replace('~[.[:cntrl:][:space:]]~', '', shell_exec('ps aux | grep ' . $pid . ' | wc -l'));
+            $exists = preg_replace('~[.[:cntrl:][:space:]]~', '', shell_exec('ps -o pid= -p ' . $pid));
 
-            if ($count > 0) {
-                return true;
-            }
+            return !empty($exists);
         }
 
         return false;

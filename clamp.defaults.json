@@ -20,7 +20,7 @@
             "directoryindex": "index.html index.php",
             "setenv": "LOCAL_SERVER true",
             "user": "`whoami`",
-            "group": "staff",
+            "group": "_www",
             "loadmodule": {
                 "authz_host_module": "/usr/libexec/apache2/mod_authz_host.so",
                 "dir_module": "/usr/libexec/apache2/mod_dir.so",

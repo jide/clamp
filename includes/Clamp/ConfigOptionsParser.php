@@ -109,7 +109,7 @@ class ConfigOptionsParser extends ConsoleKit\DefaultOptionsParser implements Con
     protected function parseConfigFile()
     {
         $this->json = array();
-        $files = array(__DIR__ . '/../../clamp.defaults.json', $this->configFile);
+        $files = array($this->defaultsFile, $this->configFile);
 
         foreach ($files as $file) {
             if (file_exists($file)) {

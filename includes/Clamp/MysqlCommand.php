@@ -36,7 +36,7 @@ class MysqlCommand extends \Clamp\Command
         }
         else if (!empty($args) && $args[0] == 'stop') {
             if ($this->isRunning($this->getPath($options['pid-file']))) {
-                exec($this->getConfig('$.mysql.commands.mysqladmin') . ' --user=root --password="' . $this->getConfig('$.mysql.users.root.password') . '" ' . $this->buildParameters($options, 'socket') . ' shutdown');
+                exec('sudo kill -TERM $(cat ' . $options['pid-file'] . ')');
                 $this->waitForNoMore($this->getPath($options['pid-file']));
                 $this->writeln('MySQL server stopped', ConsoleKit\Colors::RED);
             }
