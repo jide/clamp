@@ -80,6 +80,8 @@ $ clamp host set [host] // Add a host.
 $ clamp host unset [host] // Remove a host.
 
 $ clamp config write // Writes the default clamp.json file in the current folder.
+
+$ clamp update // Update to latest version.
 ```
 
 ### [<span class="octicon octicon-link"></span>](#configuration) Configuration
