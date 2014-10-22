@@ -52,6 +52,34 @@
 
         <p>You must have <a href="http://brew.sh" target="_blank">homebrew</a> installed.</p>
 
+        <h3><a name="user-content--os-x-yosemite" class="anchor" href="#-os-x-yosemite"><span class="octicon octicon-link"></span></a> OS X Yosemite</h3>
+
+        <p>Run the install script again to update to latest version. After this, the <code>clamp update</code> command will be available and you won't have to call this script directly again :</p>
+
+        <pre><code>$ curl http://jide.github.io/clamp/install.sh | sh</code></pre>
+
+        <p>If you have trouble running MySQL server, you may have to reinstall MariaDB :</p>
+
+        <ul>
+          <li>Download and install XCode 6</li>
+          <li>Update Hombrew : <code>cd /usr/local &amp;&amp; git pull</code></li>
+          <li>Uninstall MariaDB : <code>brew uninstall mariadb</code></li>
+          <li>Reinstall MariaDB : <code>brew install mariadb</code></li>
+        </ul>
+
+        <p>Since in Yosemite Apache version is 2.4, you may have to correct your .htaccess file :</p>
+
+        <pre><code>  Order allow,deny</code></pre>
+
+        <p>Becomes :</p>
+
+        <pre><code>  &lt;IfModule mod_authz_core.c&gt;
+    Require all denied
+  &lt;/IfModule&gt;
+  &lt;IfModule !mod_authz_core.c&gt;
+    Order allow,deny
+  &lt;/IfModule&gt;</code></pre>
+
         <h3><a name="quickstart" class="anchor" href="#quickstart"><span class="octicon octicon-link"></span></a> Usage</h3>
 
         <p>To serve the current folder :</p>
@@ -80,11 +108,15 @@ $ clamp mysql import [file?] [database?] // Import SQL file.
 
 $ clamp host set [host] // Add a host.
 $ clamp host unset [host] // Remove a host.
+
+$ clamp config write // Writes the default clamp.json file in the current folder.
 </code></pre>
 
         <h3><a name="configuration" class="anchor" href="#configuration"><span class="octicon octicon-link"></span></a> Configuration</h3>
 
         <p>All configuration resides in a clamp.json file. All the parameters are built using this file and then passed to the different commands. It uses a few tricks that make it very flexible. </p>
+
+        <p>To copy the default configuration file in the current directory, use <code>clamp config write</code>.</p>
 
         <p>A simple configuration :</p>
 
