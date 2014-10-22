@@ -16,14 +16,20 @@ class ConfigOptionsParser extends ConsoleKit\DefaultOptionsParser implements Con
 
     protected $variables = array();
 
-    public function __construct($configFile = 'clamp.json', $defaultsFile = null)
+    public function __construct()
     {
         $this->variables = array(
             'cwd' => getcwd()
         );
 
-        $this->defaultsFile = $defaultsFile ?: __DIR__ . '/../../clamp.defaults.json';
-        $this->configFile = $configFile;
+        $version = substr(php_uname('r'), 0, 2);
+        $this->defaultsFile = __DIR__ . '/../../clamp.defaults.' . $version . '.json';
+
+        if (!file_exists($this->defaultsFile)) {
+            $this->defaultsFile = __DIR__ . '/../../clamp.defaults.json';
+        }
+
+        $this->configFile = 'clamp.json';
     }
 
     public function parse(array $argv)
