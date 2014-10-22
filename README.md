@@ -21,6 +21,32 @@ $ curl http://jide.github.io/clamp/install.sh | sh
 
 You must have [homebrew](http://brew.sh) installed.
 
+### [<span class="octicon octicon-link"></span>](#installation) OS X Yosemite
+
+If you have updated from OS X Mavericks to Yosemite, you may have to reinstall MariaDB :
+
+*   Download and install [XCode 6](https://developer.apple.com/downloads/download.action?path=Developer_Tools/xcode_6.1/xcode_6.1.dmg)
+*   Update Hombrew : cd /usr/local && git pull
+*   Uninstall MariaDB : `brew uninstall mariadb`
+*   Reinstall MariaDB : `brew install mariadb`
+
+Since in Yosemite Apache version is 2.4, you may have to correct your .htaccess file :
+
+```
+  Order allow,deny
+```
+
+Becomes :
+
+```
+  <IfModule mod_authz_core.c>
+    Require all denied
+  </IfModule>
+  <IfModule !mod_authz_core.c>
+    Order allow,deny
+  </IfModule>
+```
+
 ### [<span class="octicon octicon-link"></span>](#quickstart) Usage
 
 To serve the current folder :
@@ -52,11 +78,15 @@ $ clamp mysql import [file?] [database?] // Import SQL file.
 
 $ clamp host set [host] // Add a host.
 $ clamp host unset [host] // Remove a host.
+
+$ clamp config write // Writes the default clamp.json file in the current folder.
 ```
 
 ### [<span class="octicon octicon-link"></span>](#configuration) Configuration
 
-All configuration resides in a clamp.json file. All the parameters are built using this file and then passed to the different commands. It uses a few tricks that make it very flexible. 
+All configuration resides in a clamp.json file. All the parameters are built using this file and then passed to the different commands. It uses a few tricks that make it very flexible.
+
+To copy the default configuration file in the current directory, use `clamp config write`.
 
 A simple configuration :
 
