@@ -7,7 +7,7 @@
             "httpd": "sudo httpd"
         },
         "options": {
-            "<Directory '{{$cwd}}'>": "",
+            "<Directory": " '{{$cwd}}'>",
             "AllowOverride": "All",
             "</Directory>": "",
             "servername": "{{$.address}}",
