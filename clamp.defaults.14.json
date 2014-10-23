@@ -7,7 +7,7 @@
             "httpd": "sudo httpd"
         },
         "options": {
-            "<Directory": "{{$cwd}}>",
+            "<Directory '{{$cwd}}'>": "",
             "AllowOverride": "All",
             "</Directory>": "",
             "servername": "{{$.address}}",
@@ -15,7 +15,7 @@
             "documentroot": "'{{$cwd}}'",
             "serverroot": "'{{$cwd}}'",
             "pidfile": "'{{$cwd}}/.clamp/tmp/httpd.pid'",
-            "mutex": "flock:{{$cwd}}/.clamp/tmp/ default",
+            "mutex": "'flock:{{$cwd}}/.clamp/tmp/' default",
             "loglevel": "info",
             "errorlog": "'{{$cwd}}/.clamp/logs/apache.error.log'",
             "customlog": "'{{$cwd}}/.clamp/logs/apache.access.log' common",
