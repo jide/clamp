@@ -15,7 +15,7 @@
             "documentroot": "'{{$cwd}}'",
             "serverroot": "'{{$cwd}}'",
             "pidfile": "'{{$cwd}}/.clamp/tmp/httpd.pid'",
-            "mutex": "'flock:{{$cwd}}/.clamp/tmp/' default",
+            "defaultruntimedir": "'{{$cwd}}/.clamp/tmp",
             "loglevel": "info",
             "errorlog": "'{{$cwd}}/.clamp/logs/apache.error.log'",
             "customlog": "'{{$cwd}}/.clamp/logs/apache.access.log' common",
