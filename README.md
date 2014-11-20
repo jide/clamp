@@ -23,19 +23,6 @@ You must have [homebrew](http://brew.sh) installed.
 
 ### [<span class="octicon octicon-link"></span>](#installation) OS X Yosemite
 
-Run the install script again to update to latest version. After this, the `clamp update` command will be available and you won't have to call this script directly again :
-
-```
-$ brew install https://raw.githubusercontent.com/jide/clamp/master/clamp.rb
-```
-
-If you have trouble running MySQL server, you may have to reinstall MariaDB :
-
-*   Download and install [XCode 6](https://developer.apple.com/downloads/download.action?path=Developer_Tools/xcode_6.1/xcode_6.1.dmg)
-*   Update Hombrew : cd /usr/local && git pull
-*   Uninstall MariaDB : `brew uninstall mariadb`
-*   Reinstall MariaDB : `brew install mariadb`
-
 Since in Yosemite Apache version is 2.4, you may have to correct your .htaccess file :
 
 ```
