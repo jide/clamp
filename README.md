@@ -16,7 +16,7 @@ Clamp is a Command Line Apache MySQL PHP for Mac OS X made for local development
 ### [<span class="octicon octicon-link"></span>](#installation) Installation
 
 ```
-$ brew install https://raw.githubusercontent.com/jide/clamp/master/clamp.rb
+$ brew install https://raw.githubusercontent.com/jide/clamp/gh-pages/clamp.rb
 ```
 
 You must have [homebrew](http://brew.sh) installed.
