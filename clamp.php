@@ -21,7 +21,6 @@ $commands = array(
     'Clamp\StartCommand',
     'Clamp\StopCommand',
     'Clamp\ConfigCommand',
-    'Clamp\UpdateCommand',
 );
 
 $console = new ConsoleKit\Console($commands, new Clamp\ConfigOptionsParser());
