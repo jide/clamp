@@ -16,7 +16,7 @@ Clamp is a Command Line Apache MySQL PHP for Mac OS X made for local development
 ### [<span class="octicon octicon-link"></span>](#installation) Installation
 
 ```
-$ curl http://jide.github.io/clamp/install.sh | sh
+$ brew install https://raw.githubusercontent.com/jide/clamp/master/clamp.rb
 ```
 
 You must have [homebrew](http://brew.sh) installed.
@@ -26,7 +26,7 @@ You must have [homebrew](http://brew.sh) installed.
 Run the install script again to update to latest version. After this, the `clamp update` command will be available and you won't have to call this script directly again :
 
 ```
-$ curl http://jide.github.io/clamp/install.sh | sh
+$ brew install https://raw.githubusercontent.com/perasmus/clamp_formula/master/clamp.rb
 ```
 
 If you have trouble running MySQL server, you may have to reinstall MariaDB :
