@@ -2,9 +2,9 @@ require "formula"
 
 class Clamp < Formula
   homepage "http://jide.github.io/clamp"
-  url "https://github.com/jide/clamp.git", :using => :git, :tag => "1.3"
-  version "1.3"
-  sha1 "a07bfefaa51ee5d3740fbd5d314738bb23200933"
+  url "https://github.com/jide/clamp.git", :using => :git, :tag => "1.3.1"
+  version "1.3.1"
+  sha1 "32876334efce5493aeaf9e76c346b8e7d9266922"
 
   depends_on "mariadb"
 
