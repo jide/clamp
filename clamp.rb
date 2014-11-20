@@ -3,7 +3,7 @@ require "formula"
 class Clamp < Formula
   homepage "http://jide.github.io/clamp"
   url "https://github.com/jide/clamp.git", :using => :git, :tag => "1.1"
-  version "1.0"
+  version "1.1"
   sha1 "e2877f4973f77c07f9a39c1fd5bd7cb0ab50e96c"
 
   depends_on "mariadb"
