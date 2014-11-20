@@ -2,7 +2,7 @@ require "formula"
 
 class Clamp < Formula
   homepage "http://jide.github.io/clamp"
-  url "https://github.com/jide/clamp/archive/1.0.tar.gz"
+  url "https://github.com/jide/clamp.git", :using => :git, :tag => "1.0"
   version "1.0"
   sha1 ""
 
