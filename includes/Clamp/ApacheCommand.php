@@ -11,6 +11,7 @@ class ApacheCommand extends \Clamp\Command
     public function executeStart(array $args = array(), array $options = array())
     {
         if (!$this->isRunning($this->getPath($options['pidfile']))) {
+            unset($options['lockfile']);
             $this->preparePaths($options);
             exec($this->getConfig('$.apache.commands.httpd') . ' -f /dev/null ' . $this->buildParameters($options) . ' > /dev/null &');
             $this->waitFor($this->getPath($options['pidfile']));
