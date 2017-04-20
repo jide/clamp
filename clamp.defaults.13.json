@@ -19,6 +19,7 @@
             "addtype": "application/x-httpd-php .php",
             "directoryindex": "index.html index.php",
             "setenv": "LOCAL_SERVER true",
+            "autoopen": false,
             "user": "`whoami`",
             "group": "_www",
             "loadmodule": {

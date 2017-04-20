@@ -23,6 +23,7 @@
             "directoryindex": "index.html index.php",
             "setenv": "LOCAL_SERVER true",
             "user": "`whoami`",
+            "autoopen": false,
             "group": "_www",
             "loadmodule": {
                 "authz_host_module": "/usr/libexec/apache2/mod_authz_host.so",
