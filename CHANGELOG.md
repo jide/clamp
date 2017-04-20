@@ -4,7 +4,11 @@ Changelog
 The format is based on [Keep a Changelog][1]
 and this project adheres to [Semantic Versioning][2].
 
-## [1.3.4] - 2017-04-20
+## [Unreleased]
+### Added
+- Add support for nginx
+
+## [1.4.0] - 2017-04-20
 ### Added
 - Add this Changelog so you can see how the application gets better.
 - Add `autoopen` feature. With `autoopen` enabled clamp will open the
