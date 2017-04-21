@@ -8,6 +8,12 @@ and this project adheres to [Semantic Versioning][2].
 ### Added
 - Add support for nginx
 
+## [1.4.1] - 2017-04-21
+### Fixed
+- Fix `autoopen` bug, which caused problems on sites which did not use the
+  default port 80. Now `autoopen` uses right port number and right protocol
+  (e.g. https instead of http if SSL is enabled).
+
 ## [1.4.0] - 2017-04-20
 ### Added
 - Add this Changelog so you can see how the application gets better.
