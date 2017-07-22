@@ -1,13 +1,13 @@
 ---
 address: localhost
-memory: "256M"
+memory: 256M
 database: db
 apache:
   commands:
     httpd: sudo httpd
   options:
     servername: "{{$.address}}"
-    listen: '80'
+    listen: 80
     ssl: false
     autoopen: false
     pidfile: "{{$cwd}}/.clamp/tmp/httpd.pid"

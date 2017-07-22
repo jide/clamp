@@ -21,7 +21,6 @@ class ApacheCommand extends \Clamp\Command
         if ($this->isRunning($this->getPath($pid))) {
             $this->writeln('Apache server is already running', ConsoleKit\Colors::YELLOW);
         } else {
-            unset($options['lockfile']);
             $this->preparePaths($options);
             $file = $this->buildConfigureFile(array_get($options, 'conf'));
             exec($this->getConfig('$.apache.commands.httpd') . $this->buildParameters(['-f' => $file]) . ' > /dev/null &');
