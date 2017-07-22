@@ -1,0 +1,61 @@
+---
+address: localhost
+memory: 256M
+database: db
+apache:
+  commands:
+    httpd: sudo httpd
+  options:
+    servername: "{{$.address}}"
+    listen: '80'
+    documentroot: "'{{$cwd}}'"
+    serverroot: "'{{$cwd}}'"
+    pidfile: "'{{$cwd}}/.clamp/tmp/httpd.pid'"
+    lockfile: "'{{$cwd}}/.clamp/tmp/accept.lock'"
+    loglevel: info
+    errorlog: "'{{$cwd}}/.clamp/logs/apache.error.log'"
+    customlog: "'{{$cwd}}/.clamp/logs/apache.access.log' common"
+    addtype: application/x-httpd-php .php
+    directoryindex: index.html index.php
+    setenv: LOCAL_SERVER true
+    autoopen: false
+    user: "`whoami`"
+    group: _www
+    loadmodule:
+      authz_host_module: "/usr/libexec/apache2/mod_authz_host.so"
+      dir_module: "/usr/libexec/apache2/mod_dir.so"
+      env_module: "/usr/libexec/apache2/mod_env.so"
+      mime_module: "/usr/libexec/apache2/mod_mime.so"
+      log_config_module: "/usr/libexec/apache2/mod_log_config.so"
+      rewrite_module: "/usr/libexec/apache2/mod_rewrite.so"
+      php5_module: "/usr/libexec/apache2/libphp5.so"
+    php_admin_value: "{{$.php.options}}"
+host:
+  options:
+    127.0.0.1: "{{$.address}}"
+mysql:
+  commands:
+    mysql: "$(brew --prefix mariadb)/bin/mysql"
+    mysqld: "$(brew --prefix mariadb)/bin/mysqld"
+    mysqladmin: "$(brew --prefix mariadb)/bin/mysqladmin"
+    mysqldump: "$(brew --prefix mariadb)/bin/mysqldump"
+    mysql_install_db: "$(brew --prefix mariadb)/bin/mysql_install_db"
+  databases:
+  - "{{$.database}}"
+  options:
+    bind-address: 127.0.0.1
+    port: '3306'
+    lower_case_table_names: 2
+    basedir: "$(brew --prefix mariadb)"
+    datadir: "'{{$cwd}}/.clamp/data'"
+    socket: "'{{$cwd}}/.clamp/tmp/mysql.sock'"
+    pid-file: "'{{$cwd}}/.clamp/tmp/mysql.pid'"
+    log_error: "'{{$cwd}}/.clamp/logs/mysql.error.log'"
+    max_binlog_size: 10M
+    max_allowed_packet: 32M
+php:
+  options:
+    memory_limit: "{{$.memory}}"
+    pdo_mysql.default_socket: "{{$.mysql.options.socket}}"
+    mysql.default_socket: "{{$.mysql.options.socket}}"
+    mysqli.default_socket: "{{$.mysql.options.socket}}"
