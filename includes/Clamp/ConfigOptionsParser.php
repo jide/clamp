@@ -155,7 +155,7 @@ class ConfigOptionsParser extends ConsoleKit\DefaultOptionsParser implements Con
                     );
                 }
 
-                if (isset($newValue) and $value != $newValue) {
+                if ($value != $newValue) {
                     $value = $newValue;
                 }
             }
