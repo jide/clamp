@@ -7,10 +7,12 @@ set_include_path(implode(PATH_SEPARATOR, array(
     get_include_path()
 )));
 
-spl_autoload_register(function($className) {
+spl_autoload_register(function ($className) {
     $filename = str_replace('\\', DIRECTORY_SEPARATOR, trim($className, '\\')) . '.php';
     require_once $filename;
 });
+
+require_once('helper.php');
 
 $commands = array(
     'Clamp\HelpCommand',

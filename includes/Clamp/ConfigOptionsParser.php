@@ -19,7 +19,8 @@ class ConfigOptionsParser extends ConsoleKit\DefaultOptionsParser implements Con
     public function __construct()
     {
         $this->variables = array(
-            '{{$cwd}}' => getcwd()
+            '{{$cwd}}' => getcwd(),
+            '{{$whoami}}' => get_current_user(),
         );
 
         $version = substr(php_uname('r'), 0, 2);
@@ -86,7 +87,7 @@ class ConfigOptionsParser extends ConsoleKit\DefaultOptionsParser implements Con
         }
 
         $expr = substr($expr, 2);
-        $value = $this->arrayGet($this->config, $expr);
+        $value = array_get($this->config, $expr);
 
         if (is_array($value) && count($value) == 1) {
             $value = reset($value);
@@ -131,15 +132,21 @@ class ConfigOptionsParser extends ConsoleKit\DefaultOptionsParser implements Con
     {
         $yaml = ($yaml ? $yaml : $this->yaml);
 
-        foreach ($yaml as $key => &$value) {
+        foreach ($yaml as &$value) {
             if (is_array($value)) {
                 $value = $this->parseVariable($value);
             }
 
             while (is_string($value) and false !== strpos($value, '{{')) {
-                if (false !== strpos($value, '{{$.')) {
-                    $value = substr($value, 4, -2);
-                    $newValue = $this->arrayGet($this->yaml, $value);
+                if (false !== $start = strpos($value, '{{$.')) {
+                    $end = strpos($value, '}}', $start);
+                    $var = substr($value, $start, $end + 2 - $start);
+                    $key = substr($var, 4, -2);
+                    $keyValue = array_get($this->yaml, $key);
+                    if (is_array($keyValue)) {
+                        throw new \Exception('array variable use in string:' . $var);
+                    }
+                    $newValue = str_replace($var, $keyValue, $value);
                 } else {
                     $newValue = str_replace(
                         array_keys($this->variables),
@@ -159,32 +166,5 @@ class ConfigOptionsParser extends ConsoleKit\DefaultOptionsParser implements Con
         }
 
         return $yaml;
-    }
-
-    /**
-     * Get an item from an array using "dot" notation.
-     *
-     * @param  array   $array
-     * @param  string  $key
-     * @param  mixed   $default
-     * @return mixed
-     */
-    protected function arrayGet($array, $key, $default = null)
-    {
-        if (is_null($key)) {
-            return $array;
-        }
-
-        if (isset($array[$key])) {
-            return $array[$key];
-        }
-
-        foreach (explode('.', $key) as $segment) {
-            if (! is_array($array) || ! array_key_exists($segment, $array)) {
-                return $default;
-            }
-            $array = $array[$segment];
-        }
-        return $array;
     }
 }
