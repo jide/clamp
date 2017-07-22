@@ -22,7 +22,7 @@ apache:
       LogLevel info
       ErrorLog '{{$cwd}}/.clamp/logs/apache.error.log'
       CustomLog '{{$cwd}}/.clamp/logs/apache.access.log' common
-      AddYype application/x-httpd-php .php
+      AddType application/x-httpd-php .php
       DirectoryIndex index.html index.php
       SetEnv LOCAL_SERVER true
       User {{$whoami}}
