@@ -76,7 +76,14 @@ class ApacheCommand extends \Clamp\Command
         $this->autoopen = $options['autoopen'] === true && $hasServername;
         $this->servername = $hasServername ? $options['servername'] : null;
         $this->port = $hasServername ? $options['listen'] : null;
-        $this->useSSL = isset($options['ssl']) && $options['ssl'];
+
+        if (false !== $pos = strpos($options['conf'], 'SSLEngine')) {
+            $end = strpos($options['conf'], "\n", $pos);
+            $start = $pos + strlen('SSLEngine');
+            $on = substr($options['conf'], $start, $end - $start);
+            $on = strtolower(trim($on));
+            $this->useSSL = 'on' === $on;
+        }
     }
 
     /**

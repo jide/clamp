@@ -1,14 +1,13 @@
 ---
 address: localhost
-memory: "256M"
+memory: 256M
 database: db
 apache:
   commands:
     httpd: sudo httpd
   options:
     servername: "{{$.address}}"
-    listen: '80'
-    ssl: false
+    listen: 80
     autoopen: false
     pidfile: "{{$cwd}}/.clamp/tmp/httpd.pid"
     conf: |
@@ -27,6 +26,7 @@ apache:
       DirectoryIndex index.html index.php
       SetEnv LOCAL_SERVER true
       User {{$whoami}}
+      SSLEngine on
       Group _www
       LoadModule authz_core_module /usr/libexec/apache2/mod_authz_core.so
       LoadModule authz_host_module /usr/libexec/apache2/mod_authz_host.so
