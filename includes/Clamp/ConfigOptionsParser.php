@@ -89,10 +89,6 @@ class ConfigOptionsParser extends ConsoleKit\DefaultOptionsParser implements Con
         $expr = substr($expr, 2);
         $value = array_get($this->config, $expr);
 
-        if (is_array($value) && count($value) == 1) {
-            $value = reset($value);
-        }
-
         return $value;
     }
 

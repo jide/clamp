@@ -8,25 +8,31 @@ apache:
   options:
     servername: "{{$.address}}"
     listen: 80
-    pidfile: "{{$cwd}}/.clamp/tmp/httpd.pid"
-    lockfile: "{{$cwd}}/.clamp/tmp/accept.lock"
+    autoopen: false
+    errorlog: "{{$cwd}}/.clamp/logs/apache.error.log"
+    customlog: "{{$cwd}}/.clamp/logs/apache.access.log"
+    pidfile: "'{{$cwd}}/.clamp/tmp/httpd.pid'"
+    lockfile: "'{{$cwd}}/.clamp/tmp/accept.lock'",
     conf: |
-      <Directory {{$cwd}}>
-        AllowOverride: All
-      </Directory>
       ServerName {{$.apache.options.servername}}
       Listen {{$.apache.options.listen}}
-      DocumentRoot {{$cwd}}
-      ServerRoot {{$cwd}}
-      DefaultRuntimeDir '{{$cwd}}/.clamp/tmp'
-      LogLevel info
-      ErrorLog '{{$cwd}}/.clamp/logs/apache.error.log'
-      CustomLog '{{$cwd}}/.clamp/logs/apache.access.log' common
-      AddType application/x-httpd-php .php
-      DirectoryIndex index.html index.php
-      SetEnv LOCAL_SERVER true
+      DefaultRuntimeDir "{{$cwd}}/.clamp/tmp"
       User {{$whoami}}
       Group _www
+
+      ServerRoot "{{$cwd}}"
+      DocumentRoot "{{$cwd}}"
+
+      LogLevel info
+      LogFormat "%h %l %u %t \"%r\" %>s %b" common
+      ErrorLog {{$.apache.options.errorlog}}
+      CustomLog {{$.apache.options.customlog}}  common
+
+      AddType application/x-httpd-php .php
+      DirectoryIndex index.html index.php
+
+      SetEnv LOCAL_SERVER true
+
       LoadModule authz_core_module /usr/libexec/apache2/mod_authz_core.so
       LoadModule authz_host_module /usr/libexec/apache2/mod_authz_host.so
       LoadModule dir_module /usr/libexec/apache2/mod_dir.so
@@ -36,14 +42,15 @@ apache:
       LoadModule rewrite_module /usr/libexec/apache2/mod_rewrite.so
       LoadModule php5_module /usr/libexec/apache2/libphp5.so
       LoadModule unixd_module /usr/libexec/apache2/mod_unixd.so
+
       php_admin_value memory_limit {{$.memory}}
-      php_admin_value pdo_mysql.default_socket "{{$.mysql.options.socket}}"
-      php_admin_value mysql.default_socket: "{{$.mysql.options.socket}}"
-      php_admin_value mysqli.default_socket: "{{$.mysql.options.socket}}"
+      php_admin_value pdo_mysql.default_socket {{$.mysql.options.socket}}
+      php_admin_value mysql.default_socket: {{$.mysql.options.socket}}
+      php_admin_value mysqli.default_socket: {{$.mysql.options.socket}}
 
 host:
   options:
-    127.0.0.1: "{{$.address}}"
+    "127.0.0.1": "{{$.address}}"
 mysql:
   commands:
     mysql: "$(brew --prefix mariadb)/bin/mysql"
@@ -58,9 +65,9 @@ mysql:
     port: '3306'
     lower_case_table_names: 2
     basedir: "$(brew --prefix mariadb)"
-    datadir: "{{$cwd}}/.clamp/data"
-    socket: "{{$cwd}}/.clamp/tmp/mysql.sock"
-    pid-file: "{{$cwd}}/.clamp/tmp/mysql.pid"
-    log_error: "{{$cwd}}/.clamp/logs/mysql.error.log"
+    datadir: "'{{$cwd}}/.clamp/data'"
+    socket: "'{{$cwd}}/.clamp/tmp/mysql.sock'"
+    pid-file: "'{{$cwd}}/.clamp/tmp/mysql.pid'"
+    log_error: "'{{$cwd}}/.clamp/logs/mysql.error.log'"
     max_binlog_size: 10M
     max_allowed_packet: 32M

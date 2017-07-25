@@ -6,7 +6,7 @@ use ConsoleKit;
 
 class ApacheCommand extends \Clamp\Command
 {
-    protected $parameter = '%1$s "%2$s"';
+    protected $parameter = '%2$s';
     protected $autoopen = false;
     protected $servername = null;
     protected $port = "80";
@@ -18,12 +18,21 @@ class ApacheCommand extends \Clamp\Command
         $this->_configureAutoopen($options);
 
         $pid = array_get($options, 'pidfile');
+
         if ($this->isRunning($this->getPath($pid))) {
             $this->writeln('Apache server is already running', ConsoleKit\Colors::YELLOW);
         } else {
             $this->preparePaths($options);
             $file = $this->buildConfigureFile(array_get($options, 'conf'));
-            exec($this->getConfig('$.apache.commands.httpd') . $this->buildParameters(['-f' => $file]) . ' > /dev/null &');
+            $parameters = [
+                "-f '$file'",
+                "-c \"pidfile $pid\"",
+            ];
+            if (isset($options['lockfile'])) {
+                $parameters[] = "-c \"lockfile $options[lockfile]\"";
+            }
+
+            exec($this->getConfig('$.apache.commands.httpd') . ' ' . $this->buildParameters($parameters) . ' > /dev/null &');
             $this->waitFor($this->getPath($pid));
             $this->writeln('Apache server started', ConsoleKit\Colors::GREEN);
         }
