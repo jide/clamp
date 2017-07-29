@@ -2,16 +2,17 @@
 
 set_include_path(implode(PATH_SEPARATOR, array(
     __DIR__ . '/includes/ConsoleKit/src',
-    __DIR__ . '/includes',
+    __DIR__ . '/includes/Spyc',
+    __DIR__ . '/includes/',
     get_include_path()
 )));
 
-spl_autoload_register(function($className) {
+spl_autoload_register(function ($className) {
     $filename = str_replace('\\', DIRECTORY_SEPARATOR, trim($className, '\\')) . '.php';
     require_once $filename;
 });
 
-require_once 'JsonPath/JsonPath.php';
+require_once('helper.php');
 
 $commands = array(
     'Clamp\HelpCommand',

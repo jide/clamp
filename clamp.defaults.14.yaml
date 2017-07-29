@@ -1,0 +1,77 @@
+---
+address: localhost
+memory: 256M
+database: db
+apache:
+  commands:
+    httpd: sudo httpd
+  options:
+    servername: "{{$.address}}"
+    listen: 80
+    autoopen: false
+    errorlog: "{{$cwd}}/.clamp/logs/apache.error.log"
+    customlog: "{{$cwd}}/.clamp/logs/apache.access.log"
+    pidfile: "'{{$cwd}}/.clamp/tmp/httpd.pid'"
+    conf: |
+      ServerName {{$.apache.options.servername}}
+      Listen {{$.apache.options.listen}}
+      DefaultRuntimeDir "{{$cwd}}/.clamp/tmp"
+      User {{$whoami}}
+      Group _www
+
+      ServerRoot "{{$cwd}}"
+      DocumentRoot "{{$cwd}}"
+      <Directory "{{$cwd}}">
+        Options FollowSymLinks Indexes
+        AllowOverride All
+        Require all granted
+      </Directory>
+
+      LogLevel info
+      LogFormat "%h %l %u %t \"%r\" %>s %b" common
+      ErrorLog {{$.apache.options.errorlog}}
+      CustomLog {{$.apache.options.customlog}}  common
+
+      AddType application/x-httpd-php .php
+      DirectoryIndex index.html index.php
+
+      SetEnv LOCAL_SERVER true
+
+      LoadModule authz_core_module /usr/libexec/apache2/mod_authz_core.so
+      LoadModule authz_host_module /usr/libexec/apache2/mod_authz_host.so
+      LoadModule dir_module /usr/libexec/apache2/mod_dir.so
+      LoadModule env_module /usr/libexec/apache2/mod_env.so
+      LoadModule mime_module /usr/libexec/apache2/mod_mime.so
+      LoadModule log_config_module /usr/libexec/apache2/mod_log_config.so
+      LoadModule rewrite_module /usr/libexec/apache2/mod_rewrite.so
+      LoadModule php5_module /usr/libexec/apache2/libphp5.so
+      LoadModule unixd_module /usr/libexec/apache2/mod_unixd.so
+
+      php_admin_value memory_limit {{$.memory}}
+      php_admin_value pdo_mysql.default_socket {{$.mysql.options.socket}}
+      php_admin_value mysql.default_socket: {{$.mysql.options.socket}}
+      php_admin_value mysqli.default_socket: {{$.mysql.options.socket}}
+
+host:
+  options:
+    "127.0.0.1": "{{$.address}}"
+mysql:
+  commands:
+    mysql: "$(brew --prefix mariadb)/bin/mysql"
+    mysqld: "$(brew --prefix mariadb)/bin/mysqld"
+    mysqladmin: "$(brew --prefix mariadb)/bin/mysqladmin"
+    mysqldump: "$(brew --prefix mariadb)/bin/mysqldump"
+    mysql_install_db: "$(brew --prefix mariadb)/bin/mysql_install_db"
+  databases:
+  - "{{$.database}}"
+  options:
+    bind-address: 127.0.0.1
+    port: '3306'
+    lower_case_table_names: 2
+    basedir: "$(brew --prefix mariadb)"
+    datadir: "'{{$cwd}}/.clamp/data'"
+    socket: "'{{$cwd}}/.clamp/tmp/mysql.sock'"
+    pid-file: "'{{$cwd}}/.clamp/tmp/mysql.pid'"
+    log_error: "'{{$cwd}}/.clamp/logs/mysql.error.log'"
+    max_binlog_size: 10M
+    max_allowed_packet: 32M

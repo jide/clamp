@@ -4,7 +4,7 @@ namespace Clamp;
 
 use ConsoleKit;
 
-class ConfigOptionsParser extends ConsoleKit\DefaultOptionsParser implements ConsoleKit\OptionsParser 
+class ConfigOptionsParser extends ConsoleKit\DefaultOptionsParser implements ConsoleKit\OptionsParser
 {
     protected $defaultsFile;
 
@@ -12,24 +12,26 @@ class ConfigOptionsParser extends ConsoleKit\DefaultOptionsParser implements Con
 
     protected $config;
 
-    protected $json = array();
+    protected $yaml = array();
 
     protected $variables = array();
 
     public function __construct()
     {
         $this->variables = array(
-            'cwd' => getcwd()
+            '{{$cwd}}' => getcwd(),
+            '{{$whoami}}' => get_current_user(),
         );
 
         $version = substr(php_uname('r'), 0, 2);
-        $this->defaultsFile = __DIR__ . '/../../clamp.defaults.' . $version . '.json';
+
+        $this->defaultsFile = __DIR__ . '/../../clamp.defaults.' . $version . '.yaml';
 
         if (!file_exists($this->defaultsFile)) {
-            $this->defaultsFile = __DIR__ . '/../../clamp.defaults.json';
+            $this->defaultsFile = __DIR__ . '/../../clamp.defaults.yaml';
         }
 
-        $this->configFile = 'clamp.json';
+        $this->configFile = 'clamp.yaml';
     }
 
     public function parse(array $argv)
@@ -40,7 +42,7 @@ class ConfigOptionsParser extends ConsoleKit\DefaultOptionsParser implements Con
 
         list($args, $options) = parent::parse($argv);
 
-        $type = $args[0];
+        $type = isset($args[0]) ? $args[0] : null;
 
         if (isset($this->config[$type])) {
             $config = $this->config[$type];
@@ -80,19 +82,14 @@ class ConfigOptionsParser extends ConsoleKit\DefaultOptionsParser implements Con
 
     public function getConfig($expr = null)
     {
-        if (isset($expr)) {
-            $value = jsonPath($this->config, $expr);
-
-            if (is_array($value) && count($value) == 1) {
-                return reset($value);
-            }
-            else {
-                return $value;
-            }
-        }
-        else {
+        if (!isset($expr)) {
             return $this->config;
         }
+
+        $expr = substr($expr, 2);
+        $value = array_get($this->config, $expr);
+
+        return $value;
     }
 
     public function setVariables($variables)
@@ -108,77 +105,62 @@ class ConfigOptionsParser extends ConsoleKit\DefaultOptionsParser implements Con
 
     protected function parseConfigFile()
     {
-        $this->json = array();
+        $this->yaml = array();
         $files = array($this->defaultsFile, $this->configFile);
 
         foreach ($files as $file) {
             if (file_exists($file)) {
-                $json = json_decode(file_get_contents($file), true);
-
-                if (!$json) {
+                $yaml = \Spyc::YAMLLoad($file);
+                if (!$yaml) {
                     throw new ConsoleKit\ConsoleException("Error parsing '$file'");
                 }
-                else {
-                    $this->json = array_replace_recursive($this->json, $json);
-                }
+
+                $this->yaml = array_replace_recursive($this->yaml, $yaml);
             }
         }
 
-        $this->config = $this->parseJson();
+        $this->config = $this->parseVariable();
 
         return $this;
     }
 
-    protected function parseJson($json = null)
+    protected function parseVariable($yaml = null)
     {
-        $json = ($json ? $json : $this->json);
+        $yaml = ($yaml ? $yaml : $this->yaml);
 
-        foreach ($json as $key => &$value) {
+        foreach ($yaml as &$value) {
             if (is_array($value)) {
-                $value = $this->parseJson($value);
+                $value = $this->parseVariable($value);
             }
-            else {
-                while (!is_array($value) && strstr($value, '{{')) {
-                    // Variables.
-                    if (preg_match('/\{\{\$[a-z\-_]+\}\}/', $value, $matches)) {
-                        $newValue = preg_replace_callback('/\{\{\$([a-z\-_]+)\}\}/', array($this, 'replaceVariables'), $value);
-                    }
-                    // Pure JsonPath, could return an array.
-                    else if (preg_match('/^\{\{(\$\.[a-z\-\._]+)\}\}$/', $value, $matches)) {
-                        $newValue = $this->replaceJsonPath($matches);
-                    }
-                    // Inline JsonPath, returns a string.
-                    else {
-                        $newValue = preg_replace_callback('/\{\{(\$\.[a-z\-\._]+)\}\}/', array($this, 'replaceJsonPath'), $value);
-                    }
 
-                    if ($value != $newValue) {
-                        $value = $newValue;
+            while (is_string($value) and false !== strpos($value, '{{')) {
+                if (false !== $start = strpos($value, '{{$.')) {
+                    $end = strpos($value, '}}', $start);
+                    $var = substr($value, $start, $end + 2 - $start);
+                    $key = substr($var, 4, -2);
+                    $keyValue = array_get($this->yaml, $key);
+                    if (is_array($keyValue)) {
+                        throw new \Exception('array variable use in string:' . $var);
                     }
-                    else {
-                        break;
-                    }
+                    $newValue = str_replace($var, $keyValue, $value);
+                } else {
+                    $newValue = str_replace(
+                        array_keys($this->variables),
+                        array_values($this->variables),
+                        $value
+                    );
                 }
 
-                if (is_array($value)) {
-                    $value = $this->parseJson($value);
+                if ($value != $newValue) {
+                    $value = $newValue;
                 }
+            }
+
+            if (is_array($value)) {
+                $value = $this->parseVariable($value);
             }
         }
 
-        return $json;
-    }
-
-    protected function replaceVariables($matches)
-    {
-        if (isset($this->variables[$matches[1]])) {
-            return $this->variables[$matches[1]];
-        }
-    }
-
-    protected function replaceJsonPath($matches)
-    {
-        $value = jsonPath($this->json, $matches[1]);
-        return (is_array($value) && count($value) == 1 ? reset($value) : $value);
+        return $yaml;
     }
 }
