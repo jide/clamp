@@ -8,6 +8,11 @@ and this project adheres to [Semantic Versioning][2].
 ### Added
 - Add support for nginx
 
+## [1.4.2] - 2018-02-23
+### Changed
+- Use PHP7 by default as macOS 10.13.x (aka High Sierra) has only PHP7
+  installed.
+
 ## [1.4.1] - 2017-04-21
 ### Fixed
 - Fix `autoopen` bug, which caused problems on sites which did not use the
