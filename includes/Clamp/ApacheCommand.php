@@ -32,7 +32,7 @@ class ApacheCommand extends \Clamp\Command
     public function executeStop(array $args = array(), array $options = array())
     {
         if ($this->isRunning($this->getPath($options['pidfile']))) {
-            exec('sudo kill -TERM $(cat ' . $options['pidfile'] . ')');
+            exec('kill -TERM $(cat ' . $options['pidfile'] . ')');
             $this->waitForNoMore($this->getPath($options['pidfile']));
             $this->writeln('Apache server stopped', ConsoleKit\Colors::RED);
         }

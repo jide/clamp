@@ -4,7 +4,7 @@
     "database": "db",
     "apache": {
         "commands": {
-            "httpd": "sudo httpd"
+            "httpd": "httpd"
         },
         "options": {
             "<Directory": " '{{$cwd}}'>",
