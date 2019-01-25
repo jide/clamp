@@ -16,7 +16,7 @@ require_once 'JsonPath/JsonPath.php';
 $commands = array(
     'Clamp\HelpCommand',
     'Clamp\ApacheCommand',
-    'Clamp\HostCommand',
+    // 'Clamp\HostCommand',
     'Clamp\MysqlCommand',
     'Clamp\StartCommand',
     'Clamp\StopCommand',
