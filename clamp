@@ -1,12 +1,15 @@
 #!/bin/bash
 
+# get the directory this script is in
+DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
+
 start() {
-    php /usr/local/clamp/clamp.php start
+    php ${DIR}/clamp.php start
 }
  
 stop() {
     echo -en "\n"
-    php /usr/local/clamp/clamp.php stop
+    php ${DIR}/clamp.php stop
     exit $?
 }
 
@@ -16,5 +19,5 @@ if [ "$#" == "0" ]; then
 
     while true; do read x; done
 else
-    php /usr/local/clamp/clamp.php "$@"
+    php ${DIR}/clamp.php "$@"
 fi
