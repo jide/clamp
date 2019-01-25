@@ -12,7 +12,6 @@ class HostCommand extends \Clamp\Command
 
     public function executeSet(array $args = array(), array $options = array())
     {
-        return;
         if (!shell_exec('grep -R "' . $this->buildParameters($options) . '" /etc/hosts')) {
             exec('echo "' . $this->buildParameters($options) . '" | sudo tee -a /etc/hosts');
             exec('dscacheutil -flushcache');
@@ -25,7 +24,6 @@ class HostCommand extends \Clamp\Command
 
     public function executeUnset(array $args = array(), array $options = array())
     {
-        return;
         if (shell_exec('grep -R "' . $this->buildParameters($options) . '" /etc/hosts')) {
             exec('sudo sed -i "" -e "/' . preg_quote($this->buildParameters($options)) . '/d" /etc/hosts');
             exec('dscacheutil -flushcache');
