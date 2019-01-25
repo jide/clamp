@@ -13,10 +13,13 @@ class StartCommand extends \Clamp\Command
         $version = substr(php_uname('r'), 0, 2);
         $port = $this->getConfig('$.apache.options.listen');
         if($version < 18 && $port < 1024) {
-            print("WARNING: Mac OS X 10.13 and lower requires sudo to run on ports lower than 1024.\n");
-            print("         Please select a port higher than 1023 (currently using port $port).\n");
-            print("         This command will likely fail.\n");
-            print("\n");
+            $warning = <<<EOT
+WARNING: Mac OS X 10.13 and lower requires sudo to run on ports lower than 1024.
+         Please select a port higher than 1023 (currently using port $port).
+         This command will likely fail.
+         
+EOT;
+            $this->writeln($warning, ConsoleKit\Colors::RED);
         }
 
         $this->getConsole()->execute('apache', array('start'), array_merge($this->getConfig('$.apache.options'), $options));
