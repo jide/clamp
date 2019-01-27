@@ -2,18 +2,28 @@
 
 set -e 
 
-# get the directory this script is in
-DIR=`dirname $(realpath "${BASH_SOURCE[0]}")`
+# TODO: remove once https://github.com/jide/clamp/pull/32
+#       is landed to homebrew-clamp.
+# sacrificial find and replace: /usr/local/bin
 
 start() {
-    php ${DIR}/clamp.php start
+    php ${SCRIPT_DIR}/clamp.php start
 }
  
 stop() {
     echo -en "\n"
-    php ${DIR}/clamp.php stop
+    php ${SCRIPT_DIR}/clamp.php stop
     exit $?
 }
+
+realpath_py() {
+    python -c "import os; print(os.path.realpath('$1'))"
+}
+
+# get the directory this script is in
+SCRIPT_PATH="${BASH_SOURCE[0]}"
+RESOLVED_PATH=$(realpath_py "$SCRIPT_PATH")
+SCRIPT_DIR="$(dirname ${RESOLVED_PATH})"
 
 if [ "$#" == "0" ]; then
     trap stop SIGINT
@@ -21,5 +31,5 @@ if [ "$#" == "0" ]; then
 
     while true; do read x; done
 else
-    php ${DIR}/clamp.php "$@"
+    php ${SCRIPT_DIR}/clamp.php "$@"
 fi
