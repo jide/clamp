@@ -70,6 +70,9 @@ $ clamp mysql create-db [database] // Create a database.
 $ clamp mysql export [database?] [file?] // Export databases.
 $ clamp mysql import [file?] [database?] // Import SQL file.
 
+$ clamp host set [host] // Add a host.
+$ clamp host unset [host] // Remove a host.
+
 $ clamp config write // Writes the default clamp.json file in the current folder.
 ```
 
