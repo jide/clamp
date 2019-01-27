@@ -12,17 +12,30 @@ class ApacheCommand extends \Clamp\Command
     protected $port = "80";
     protected $useSSL = FALSE;
 
+    private function sudo_required() {
+        $version = substr(php_uname('r'), 0, 2);
+        $port = $this->getConfig('$.apache.options.listen');
+        if($version < 18 && $port < 1024) {
+            return true;
+        }
+        return false;
+    }
+
     public function executeStart(array $args = array(), array $options = array())
     {
         $this->_configureAutoopen($options);
         if (!$this->isRunning($this->getPath($options['pidfile']))) {
             unset($options['lockfile']);
             $this->preparePaths($options);
-            exec($this->getConfig('$.apache.commands.httpd') . ' -f /dev/null ' . $this->buildParameters($options) . ' > /dev/null &');
+            if($this->sudo_required()) {
+                exec('sudo ' . $this->getConfig('$.apache.commands.httpd') . ' -f /dev/null ' . $this->buildParameters($options) . ' > /dev/null &');
+            }
+            else {
+                exec($this->getConfig('$.apache.commands.httpd') . ' -f /dev/null ' . $this->buildParameters($options) . ' > /dev/null &');
+            }
             $this->waitFor($this->getPath($options['pidfile']));
             $this->writeln('Apache server started', ConsoleKit\Colors::GREEN);
-        }
-        else {
+        } else {
             $this->writeln('Apache server is already running', ConsoleKit\Colors::YELLOW);
         }
 
@@ -32,7 +45,11 @@ class ApacheCommand extends \Clamp\Command
     public function executeStop(array $args = array(), array $options = array())
     {
         if ($this->isRunning($this->getPath($options['pidfile']))) {
-            exec('kill -TERM $(cat ' . $options['pidfile'] . ')');
+            if($this->sudo_required()) {
+                exec('sudo kill -TERM $(cat ' . $options['pidfile'] . ')');
+            } else {
+                exec('kill -TERM $(cat ' . $options['pidfile'] . ')');
+            }
             $this->waitForNoMore($this->getPath($options['pidfile']));
             $this->writeln('Apache server stopped', ConsoleKit\Colors::RED);
         }
