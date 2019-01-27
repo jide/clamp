@@ -16,8 +16,7 @@ require_once 'JsonPath/JsonPath.php';
 $commands = array(
     'Clamp\HelpCommand',
     'Clamp\ApacheCommand',
-    // disabled as these commands require sudo
-    // 'Clamp\HostCommand',
+    'Clamp\HostCommand',
     'Clamp\MysqlCommand',
     'Clamp\StartCommand',
     'Clamp\StopCommand',
