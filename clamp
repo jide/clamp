@@ -2,8 +2,11 @@
 
 set -e
 
-# TODO: remove once https://github.com/jide/clamp/pull/32
-# sacrificial find and replace: /usr/local/clamp
+# TODO: remove once a PR for homebrew-clamp lands that
+#       removes the find and replace. line below makes
+#       homebrew happy until then.
+# 
+# installation path: /usr/local/clamp
 
 start() {
     php ${SCRIPT_DIR}/clamp.php start
