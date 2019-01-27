@@ -19,7 +19,7 @@ WARNING: Mac OS X 10.13 and lower requires sudo to run on ports lower than 1024.
          This command will likely fail.
 
 EOT;
-            $this->writeln($warning, ConsoleKit\Colors::RED);
+            $this->writeln($warning, ConsoleKit\Colors::YELLOW);
         }
 
         $this->getConsole()->execute('apache', array('start'), array_merge($this->getConfig('$.apache.options'), $options));
