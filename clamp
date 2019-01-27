@@ -34,7 +34,7 @@ realpath_sh() {
 
 # get the directory this script is in
 SCRIPT_PATH="${BASH_SOURCE[0]}"
-RESOLVED_PATH=$(realpath_sh "$SCRIPT_PATH")
+RESOLVED_PATH=$(realpath_py "$SCRIPT_PATH")
 SCRIPT_DIR="$(dirname ${RESOLVED_PATH})"
 
 if [ "$#" == "0" ]; then
