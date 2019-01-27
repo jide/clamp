@@ -122,6 +122,15 @@ abstract class Command extends ConsoleKit\Command
         return false;
     }
 
+    protected function sudoRequired() {
+        $version = substr(php_uname('r'), 0, 2);
+        $port = $this->getConfig('$.apache.options.listen');
+        if($version < 18 && $port < 1024) {
+            return true;
+        }
+        return false;
+    }
+
     protected function waitFor($file)
     {
         while (!file_exists($file)) {
