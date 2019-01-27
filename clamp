@@ -4,7 +4,7 @@ set -e
 
 # TODO: remove once https://github.com/jide/clamp/pull/32
 #       is landed to homebrew-clamp.
-# sacrificial find and replace: /usr/local/bin
+# sacrificial find and replace: /usr/local/clamp
 
 start() {
     php ${SCRIPT_DIR}/clamp.php start
