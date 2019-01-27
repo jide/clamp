@@ -1,14 +1,44 @@
 #!/bin/bash
 
+set -e
+
+# TODO: remove once a PR for homebrew-clamp lands that
+#       removes the find and replace. line below makes
+#       homebrew happy until then.
+# 
+# installation path: /usr/local/clamp
+
 start() {
-    php /usr/local/clamp/clamp.php start
+    php ${SCRIPT_DIR}/clamp.php start
 }
- 
+
 stop() {
     echo -en "\n"
-    php /usr/local/clamp/clamp.php stop
+    php ${SCRIPT_DIR}/clamp.php stop
     exit $?
 }
+
+realpath_py() {
+    python -c "import os; print(os.path.realpath('$1'))"
+}
+
+realpath_sh() {
+    OURPWD=$PWD
+    cd "$(dirname "$1")"
+    LINK=$(readlink "$(basename "$1")")
+    while [ "$LINK" ]; do
+        cd "$(dirname "$LINK")"
+        LINK=$(readlink "$(basename "$1")")
+    done
+    REALPATH="$PWD/$(basename "$1")"
+    cd "$OURPWD"
+    echo "$REALPATH"
+}
+
+# get the directory this script is in
+SCRIPT_PATH="${BASH_SOURCE[0]}"
+RESOLVED_PATH=$(realpath_py "$SCRIPT_PATH")
+SCRIPT_DIR="$(dirname ${RESOLVED_PATH})"
 
 if [ "$#" == "0" ]; then
     trap stop SIGINT
@@ -16,5 +46,5 @@ if [ "$#" == "0" ]; then
 
     while true; do read x; done
 else
-    php /usr/local/clamp/clamp.php "$@"
+    php ${SCRIPT_DIR}/clamp.php "$@"
 fi
