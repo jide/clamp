@@ -3,7 +3,6 @@
 set -e 
 
 # TODO: remove once https://github.com/jide/clamp/pull/32
-#       is landed to homebrew-clamp.
 # sacrificial find and replace: /usr/local/clamp
 
 start() {
