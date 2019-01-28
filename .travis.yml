@@ -14,4 +14,4 @@ install:
 script:
   - ./clamp -h
   - ./clamp config write
-  - ./travis/test_travis.sh
+  - .travis/test_travis.sh
