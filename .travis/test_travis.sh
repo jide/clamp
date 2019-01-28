@@ -37,3 +37,6 @@ if [[ "$OUTPUT" != *"MySQL server started"* ]]; then
   exit 1
 fi
 echo " OK"
+
+# TODO: Test 4 should check that sudo wasn't used. can't be landed yet...
+#   - alias sudo to 'echo "SUDO USED"' or something
