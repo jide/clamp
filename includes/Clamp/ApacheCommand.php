@@ -19,6 +19,8 @@ class ApacheCommand extends \Clamp\Command
             unset($options['lockfile']);
             $this->preparePaths($options);
             if($this->sudoRequired()) {
+                $warning = "Mac OS X 10.13 and lower requires sudo to run on ports lower than 1024. Adding sudo to launch command.";
+                $this->writeln($warning, ConsoleKit\Colors::YELLOW);
                 exec('sudo ' . $this->getConfig('$.apache.commands.httpd') . ' -f /dev/null ' . $this->buildParameters($options) . ' > /dev/null &');
             }
             else {
