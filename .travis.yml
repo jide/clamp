@@ -14,5 +14,4 @@ install:
 script:
   - ./clamp -h
   - ./clamp config write
-  - cp .travis/clamp.json .
-  - /usr/local/opt/coreutils/libexec/gnubin/timeout -s 0 30 './clamp'
+  - ./travis/test_travis.sh
