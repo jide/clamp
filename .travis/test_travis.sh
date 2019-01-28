@@ -13,6 +13,7 @@ retVal=$?
 set -e
 # cleanup any lingering children
 pkill httpd | true
+echo ""
 
 echo -n "Test 1: Checking that command exited normally..."
 if [ $retVal != 124 ]; then
