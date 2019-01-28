@@ -1,0 +1,18 @@
+---
+language: generic
+os: 
+  - osx
+osx_image: 
+  - xcode10.1
+
+install:
+  - brew install mariadb
+  # install coreutils for testing, but unlink so we have to explicitly use it
+  - brew upgrade coreutils 
+  - brew unlink coreutils
+
+script:
+  - ./clamp -h
+  - ./clamp config write
+  - cd .travis
+  - /usr/local/opt/coreutils/libexec/gnubin/timeout -s 0 30 './clamp'
