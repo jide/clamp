@@ -15,6 +15,8 @@ set -e
 pkill httpd | true
 echo ""
 
+# retVal will be 124 if the command exited due to timeout
+# see https://www.gnu.org/software/coreutils/manual/html_node/timeout-invocation.html
 echo -n "Test 1: Checking that command exited normally..."
 if [ $retVal != 124 ]; then
   echo "Non-124 exit code ($retVal)!"
