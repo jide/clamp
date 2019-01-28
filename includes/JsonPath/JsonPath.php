@@ -1,5 +1,5 @@
 <?php
-/* JSONPath 0.8.0 - XPath for JSON
+/* JSONPath 0.8.3 - XPath for JSON
  *
  * Copyright (c) 2007 Stefan Goessner (goessner.net)
  * Licensed under the MIT (MIT-LICENSE.txt) licence.
@@ -7,7 +7,6 @@
 
 // API function 
 function jsonPath($obj, $expr, $args=null) {
-//   printf("jsonPath(%d, %s, %s)<br>",$obj,$expr,$args);
    $jsonpath = new JsonPath();
    $jsonpath->resultType = ($args ? $args['resultType'] : "VALUE");
    $x = $jsonpath->normalize($expr);
@@ -30,7 +29,7 @@ class JsonPath {
 
    // normalize path expression
    function normalize($x) {
-      $x = preg_replace_callback("/[\['](\??\(.*?\))[\]']/", array(&$this, "_callback_01"), $x);
+      $x = preg_replace_callback(array("/[\['](\??\(.*?\))[\]']/", "/\['(.*?)'\]/"), array(&$this, "_callback_01"), $x);
       $x = preg_replace(array("/'?\.'?|\['?/", "/;;;|;;/", "/;$|'?\]|'$/"),
                         array(";", ";..;", ""),
                         $x);
@@ -53,7 +52,7 @@ class JsonPath {
       return !!$p;
    }
    function trace($expr, $val, $path) {
-      if ($expr) {
+      if ($expr !== "") {
          $x = explode(";", $expr);
          $loc = array_shift($x);
          $x = implode(";", $x);
@@ -66,15 +65,15 @@ class JsonPath {
             $this->trace($x, $val, $path);
             $this->walk($loc, $x, $val, $path, array(&$this, "_callback_04"));
          }
-         else if (preg_match("/,/", $loc)) // [name1,name2,...]
-            for ($s=preg_split("/'?,'?/", $loc),$i=0,$n=count($s); $i<$n; $i++)
-                $this->trace($s[$i].";".$x, $val, $path);
          else if (preg_match("/^\(.*?\)$/", $loc)) // [(expr)]
             $this->trace($this->evalx($loc, $val, substr($path,strrpos($path,";")+1)).";".$x, $val, $path);
          else if (preg_match("/^\?\(.*?\)$/", $loc)) // [?(expr)]
             $this->walk($loc, $x, $val, $path, array(&$this, "_callback_05"));
          else if (preg_match("/^(-?[0-9]*):(-?[0-9]*):?(-?[0-9]*)$/", $loc)) // [start:end:step]  phyton slice syntax
             $this->slice($loc, $x, $val, $path);
+         else if (preg_match("/,/", $loc)) // [name1,name2,...]
+            for ($s=preg_split("/'?,'?/", $loc),$i=0,$n=count($s); $i<$n; $i++)
+                $this->trace($s[$i].";".$x, $val, $path);
       }
       else
          $this->store($path, $val);
@@ -88,7 +87,7 @@ class JsonPath {
          call_user_func($f, $m, $loc, $expr, $val, $path);
    }
    function slice($loc, $expr, $v, $path) {
-      $s = explode(":", preg_replace("/^(-?[0-9]*):(-?[0-9]*):?(-?[0-9]*)$/", "$1:$2:$3", $name));
+      $s = explode(":", preg_replace("/^(-?[0-9]*):(-?[0-9]*):?(-?[0-9]*)$/", "$1:$2:$3", $loc));
       $len=count($v);
       $start=(int)$s[0]?$s[0]:0; 
       $end=(int)$s[1]?$s[1]:$len; 
