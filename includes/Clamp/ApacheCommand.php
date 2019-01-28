@@ -28,7 +28,8 @@ class ApacheCommand extends \Clamp\Command
             }
             $this->waitFor($this->getPath($options['pidfile']));
             $this->writeln('Apache server started', ConsoleKit\Colors::GREEN);
-        } else {
+        }
+        else {
             $this->writeln('Apache server is already running', ConsoleKit\Colors::YELLOW);
         }
 
