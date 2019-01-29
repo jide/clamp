@@ -3,9 +3,13 @@ declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
 
-require_once('setup_include_path.php');
+// require_once('setup_include_path.php');
 
-require('ConfigOptionsParser.php');
+require_once realpath(__DIR__ . '/../vendor/autoload.php');
+// require('ConfigOptionsParser.php');
+
+use Clamp\ConfigOptionsParser;
+
 
 class ConfigTest extends TestCase
 {
