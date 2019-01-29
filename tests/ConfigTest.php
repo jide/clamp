@@ -3,11 +3,11 @@ declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
 
-require_once('setup_include_path.php');
+// require_once('setup_include_path.php');
 
 // require('includes/Clamp/ConfigOptionsParser.php');
 
-class ExampleTest extends TestCase
+class ConfigTest extends TestCase
 {
 	public function setUp()
 	{
@@ -24,7 +24,7 @@ class ExampleTest extends TestCase
 		// Clean up
 	}
 
-	public function testCalculationOfMean()
+	public function testCalculationOfMean2()
 	{
 		$numbers = [3, 7, 6, 1, 5];
 		$this->assertEquals(4, 4);
@@ -32,3 +32,4 @@ class ExampleTest extends TestCase
 }
 
 
+?>
