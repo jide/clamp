@@ -2,4 +2,5 @@
 
 set -e
 
-./vendor/bin/phpunit tests/test*.php
+# ./vendor/bin/phpunit tests
+./vendor/bin/phpunit -v --debug tests
