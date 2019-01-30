@@ -14,4 +14,4 @@ install:
 script:
   - ./clamp -h
   - ./clamp config write
-  - ./*_test.sh
+  - for i in ./*_test.sh; do echo "\n*** running $i...\n" && $i; done
