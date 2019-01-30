@@ -31,8 +31,8 @@ class ConfigTest extends TestCase
 
 	public function testGetConfigPath2()
 	{
-		# TODO: figure out why this works
 		$this->assertEquals(
+			# TODO: figure out why the reset works/is needed
 			reset($this->cop->getConfig("$.host.options")),
 			'localhost');
 	}
