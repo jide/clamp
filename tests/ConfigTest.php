@@ -1,14 +1,14 @@
 <?php
 declare(strict_types=1);
 
-// bring in non-namespaced things
-require_once('setup_include_path.php');
-// bring in namespaced deps
-require_once realpath(__DIR__ . '/../vendor/autoload.php');
-
 use PHPUnit\Framework\TestCase;
 
+// bring in namespaced deps
+require_once realpath(__DIR__ . '/../vendor/autoload.php');
 use Clamp\ConfigOptionsParser;
+
+// bring in non-namespaced things
+require_once('setup_include_path.php');
 require_once 'JsonPath.php';
 
 class ConfigTest extends TestCase
