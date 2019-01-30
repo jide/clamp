@@ -10,6 +10,7 @@ use PHPUnit\Framework\TestCase;
 
 use Clamp\ConfigOptionsParser;
 use JsonPath\JsonPath;
+require_once 'JsonPath/JsonPath.php';
 
 class ConfigTest extends TestCase
 {
