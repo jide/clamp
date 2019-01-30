@@ -149,3 +149,15 @@ Everything is self-contained in a `.clamp` folder inside your project: The datab
 ```
 
 Note that this is the default configuration. But since you can define these paths in the configuration file, you are free to use a completly different structure.
+
+### Development
+
+#### Running from a git checkout
+
+```
+./clamp
+```
+
+#### Testing
+
+Testing is done with Travis (https://travis-ci.org/). See .travis.yml and the .travis directory.
