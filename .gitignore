@@ -1,2 +1,8 @@
+# clamp runtime files
+# - could be created if clamp is run in the working copy
 .clamp
 clamp.json
+
+# phar archive files
+#   - composer.phar (https://getcomposer.org/) used for testing
+*.phar
