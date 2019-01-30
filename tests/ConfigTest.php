@@ -9,8 +9,7 @@ require_once realpath(__DIR__ . '/../vendor/autoload.php');
 use PHPUnit\Framework\TestCase;
 
 use Clamp\ConfigOptionsParser;
-use JsonPath\JsonPath;
-require_once 'JsonPath/JsonPath.php';
+require_once 'JsonPath.php';
 
 class ConfigTest extends TestCase
 {
