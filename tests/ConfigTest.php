@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-# bring in non-namespaced things
+// bring in non-namespaced things
 require_once('setup_include_path.php');
-# bring in namespaced deps
+// bring in namespaced deps
 require_once realpath(__DIR__ . '/../vendor/autoload.php');
 
 use PHPUnit\Framework\TestCase;
