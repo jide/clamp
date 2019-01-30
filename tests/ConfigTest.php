@@ -20,7 +20,8 @@ class ConfigTest extends TestCase
 	{
 		// Set up the test class here
 		$this->cop = new Clamp\ConfigOptionsParser();
-		$this->cop->parse(['./clamp.json']);
+		# TODO: don't use relative path
+		$this->cop->parse(['./clamp.defaults.json']);
 	}
 
 	public function testGetConfigPath()
