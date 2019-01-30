@@ -6,3 +6,6 @@ clamp.json
 # phar archive files
 #   - composer.phar (https://getcomposer.org/) used for testing
 *.phar
+
+# composer (https://getcomposer.org/) files
+vendor/
