@@ -22,32 +22,20 @@ class ConfigTest extends TestCase
 		$this->cop->parse(['./clamp.json']);
 	}
 
-	// public function testSomething()
-	// {
-	// 	// Write test assertions here
-	// }
-
-	// public function tearDown()
-	// {
-	// 	// Clean up
-	// }
-
-	public function testGetConfig()
+	public function testGetConfigPath()
 	{
-		// $numbers = [3, 7, 6, 1, 5];
-		// $this->assertEquals(4, 4);
-		// $c = $this->cop;
-		// $this->cop->getConfig('$.apache.commands.httpd');
+		$this->assertEquals(
+			$this->cop->getConfig('$.apache.commands.httpd'),
+			'httpd');
+	}
 
-		print("123 123 123");
-		print($this->cop->getConfig());
-
-		// $this->assertEquals(
-		// 	$this->cop->getConfig(),
-		// 	// ' ',
-		// 	' abc 123 ');
+	public function testGetConfigPath2()
+	{
+		# TODO: figure out why this works
+		$this->assertEquals(
+			reset($this->cop->getConfig("$.host.options")),
+			'localhost');
 	}
 }
-
 
 ?>

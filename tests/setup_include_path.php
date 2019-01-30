@@ -10,6 +10,6 @@ set_include_path(get_include_path() . PATH_SEPARATOR . implode(PATH_SEPARATOR, $
 
 require_once 'JsonPath/JsonPath.php';
 
-print(get_include_path());
+// print(get_include_path());
 
 ?>
