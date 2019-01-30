@@ -21,6 +21,7 @@ class ConfigTest extends TestCase
 	{
 		// Set up the test class here
 		$this->cop = new Clamp\ConfigOptionsParser();
+		$this->cop->parse(['./clamp.json']);
 	}
 
 	// public function testSomething()
@@ -40,10 +41,13 @@ class ConfigTest extends TestCase
 		// $c = $this->cop;
 		// $this->cop->getConfig('$.apache.commands.httpd');
 
-		$this->assertEquals(
-			$this->cop->getConfig(),
-			// ' ',
-			' abc 123 ');
+		print("123 123 123");
+		print($this->cop->getConfig());
+
+		// $this->assertEquals(
+		// 	$this->cop->getConfig(),
+		// 	// ' ',
+		// 	' abc 123 ');
 	}
 }
 
