@@ -1,5 +1,5 @@
 # clamp runtime files
-# - could be created if clamp is run in the working copy
+#   - could be created if clamp is run in the working copy
 .clamp
 clamp.json
 
