@@ -2,5 +2,7 @@
 
 set -e
 
-# ./vendor/bin/phpunit tests
-./vendor/bin/phpunit -v --debug tests
+# quiet
+# ./vendor/bin/phpunit --bootstrap vendor/autoload.php tests
+# verbose
+./vendor/bin/phpunit --bootstrap vendor/autoload.php -v --debug tests

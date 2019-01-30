@@ -2,7 +2,7 @@
     "autoload-dev": {
         "psr-4": {
             "Clamp\\": "includes/Clamp",
-            "ConsoleKit\\": "includes/ConsoleKit/src",
+            "ConsoleKit\\": "includes/ConsoleKit/src/ConsoleKit",
             "JsonPath\\": "includes/JsonPath"
         }
     },

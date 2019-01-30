@@ -12,7 +12,6 @@ use Clamp\ConfigOptionsParser;
 use JsonPath\JsonPath;
 // use ConsoleKit\DefaultOptionsParser;
 
-
 class ConfigTest extends TestCase
 {
 
