@@ -1,11 +1,12 @@
 <?php
 declare(strict_types=1);
 
-use PHPUnit\Framework\TestCase;
-
+# bring in non-namespaced things
 require_once('setup_include_path.php');
-
+# bring in namespaced deps
 require_once realpath(__DIR__ . '/../vendor/autoload.php');
+
+use PHPUnit\Framework\TestCase;
 
 use Clamp\ConfigOptionsParser;
 use JsonPath\JsonPath;
