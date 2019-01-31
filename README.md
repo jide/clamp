@@ -158,6 +158,16 @@ Note that this is the default configuration. But since you can define these path
 ./clamp
 ```
 
-#### Testing
+#### Manual Testing
 
-Testing is done with Travis (https://travis-ci.org/). See .travis.yml and the .travis directory.
+```
+./unit_test_install.sh
+./unit_test.sh
+./integration_test.sh
+```
+
+#### Automated Testing
+
+Continuous integration is done with Travis (https://travis-ci.org/). See .travis.yml and the .travis directory.
+
+
