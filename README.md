@@ -161,7 +161,10 @@ Note that this is the default configuration. But since you can define these path
 #### Manual Testing
 
 ```
-./unit_test_install.sh
+# setup
+# - only run once/when stuff is missing
+./unit_test_setup.sh
+
 ./unit_test.sh
 ./integration_test.sh
 ```
