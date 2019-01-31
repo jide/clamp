@@ -12,7 +12,7 @@ OUTPUT=$(/usr/local/opt/coreutils/libexec/gnubin/timeout 20 './clamp' | tee /dev
 retVal=$?
 set -e
 # cleanup any lingering children
-pkill httpd | true
+pkill httpd || true
 echo ""
 
 # retVal will be 124 if the command exited due to timeout
