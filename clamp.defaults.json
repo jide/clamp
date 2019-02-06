@@ -11,7 +11,7 @@
             "AllowOverride": "All",
             "</Directory>": "",
             "servername": "{{$.address}}",
-            "listen": "80",
+            "listen": "9988",
             "documentroot": "'{{$cwd}}'",
             "serverroot": "'{{$cwd}}'",
             "pidfile": "'{{$cwd}}/.clamp/tmp/httpd.pid'",
