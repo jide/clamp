@@ -7,6 +7,8 @@ osx_image:
 
 install:
   - brew install mariadb
+  # this isn't getting created by homebrew for some strange reason
+  - mkdir -p /usr/local/etc/my.cnf.d
   # install coreutils for testing, but unlink so we have to explicitly use it
   - brew upgrade coreutils 
   - brew unlink coreutils
