@@ -1,0 +1,19 @@
+---
+language: generic
+os: 
+  - osx
+osx_image: 
+  - xcode10.1
+
+install:
+  - brew install mariadb
+  # this isn't getting created by homebrew for some strange reason
+  - mkdir -p /usr/local/etc/my.cnf.d
+  # install coreutils for testing, but unlink so we have to explicitly use it
+  - brew upgrade coreutils 
+  - brew unlink coreutils
+
+script:
+  - ./clamp -h
+  - ./clamp config write
+  - ./integration_test.sh
