@@ -5,7 +5,6 @@ set -e
 set -o pipefail
 
 # TODO: test multiple configs
-cp .travis/clamp-port8080.json ./clamp.json
 
 set +e
 OUTPUT=$(/usr/local/opt/coreutils/libexec/gnubin/timeout 20 './clamp' | tee /dev/tty)
