@@ -17,3 +17,4 @@ script:
   - ./clamp -h
   - ./clamp config write
   - ./integration_test.sh
+  - ./unit_test.sh
