@@ -35,7 +35,7 @@
                 "log_config_module": "/usr/libexec/apache2/mod_log_config.so",
                 "rewrite_module": "/usr/libexec/apache2/mod_rewrite.so",
                 "php7_module": "/usr/libexec/apache2/libphp7.so",
-                "unixd_module": "/usr/libexec/apache2/mod_unixd.so"                
+                "unixd_module": "/usr/libexec/apache2/mod_unixd.so"
             },
             "php_admin_value": "{{$.php.options}}"
         }
