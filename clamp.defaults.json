@@ -25,6 +25,7 @@
             "user": "`whoami`",
             "autoopen": false,
             "group": "_www",
+            "\" -C \"loadmodule mpm_prefork_module": "/usr/libexec/apache2/mod_mpm_prefork.so",
             "loadmodule": {
                 "authz_host_module": "/usr/libexec/apache2/mod_authz_host.so",
                 "authz_core_module": "/usr/libexec/apache2/mod_authz_core.so",
