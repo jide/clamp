@@ -53,7 +53,7 @@ Use <kbd>Ctrl</kbd> + <kbd>C</kbd> to exit.
 
 By default, this will start apache, create a database named "db", start MySQL daemon and set the host as "localhost". You can customize these settings using the [configuration](#configuration) file.
 
-You can connect to MySQL through localhost:3306 with user "root" and a blank password. [Sequel pro](http://www.sequelpro.com) is a great app for managing your databases.
+You can connect to MySQL through localhost:3306 with user "root" and a blank password. [Sequel Ace](https://sequel-ace.com) is a great app for managing your databases.
 
 ### [<span class="octicon octicon-link"></span>](#all-commands) All commands
 
